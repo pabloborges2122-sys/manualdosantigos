@@ -52,8 +52,6 @@ h2{font-size:1.75rem;text-align:center;margin-bottom:14px}
 .btn:hover{background:var(--cta-h);transform:translateY(-2px)}
 .btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--cta-h)}
 .btn small{display:block;font-weight:600;font-size:.8rem;opacity:.92;margin-top:4px;letter-spacing:0}
-.btn.sec{background:transparent;color:var(--verde);border:2px solid var(--verde);box-shadow:none;animation:none;font-size:1rem;padding:16px}
-.btn.sec:hover{background:var(--verde);color:#fff}
 @keyframes pulso{0%,100%{box-shadow:0 6px 0 var(--cta-h),0 12px 24px rgba(194,65,12,.35)}50%{box-shadow:0 6px 0 var(--cta-h),0 12px 34px rgba(194,65,12,.6)}}
 .sub-cta{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 14px;margin-top:14px;font-size:.85rem;color:var(--muted)}
 .escuro .sub-cta{color:#d9cda9}
@@ -65,8 +63,13 @@ h2{font-size:1.75rem;text-align:center;margin-bottom:14px}
 .hero h1 em{font-style:normal;color:var(--cta)}
 .hero p.sub{color:var(--muted);font-size:1.1rem;margin-bottom:24px}
 .vsl{position:relative;width:100%;max-width:340px;margin:0 auto 26px;aspect-ratio:9/16;border-radius:16px;overflow:hidden;border:5px solid var(--branco);box-shadow:0 20px 50px rgba(30,58,30,.35);background:#000}
-.vsl video{width:100%;height:100%;object-fit:cover}
-.vsl .play{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:28px;gap:10px;background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0) 55%);border:0;cursor:pointer;color:#fff;font:inherit}
+.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vsl .play{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:28px;gap:10px;background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0) 55%),url(assets/01-capa-manual.jpg) center/cover;border:0;cursor:pointer;color:#fff;font:inherit}
+.vsl .trava{position:absolute;inset:0;z-index:2;display:none;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;padding:0}
+.vsl .trava.on{display:flex}
+.vsl .trava span{display:none;width:76px;height:76px;border-radius:50%;background:rgba(194,65,12,.92);place-items:center}
+.vsl .trava.pausado{background:rgba(0,0,0,.35)}
+.vsl .trava.pausado span{display:grid}
 .vsl .play span.ic{width:84px;height:84px;border-radius:50%;background:var(--cta);display:grid;place-items:center;box-shadow:0 0 0 10px rgba(194,65,12,.3);animation:pulsoPlay 1.8s infinite}
 .vsl .play span.ic svg{margin-left:6px}
 .vsl .play b{font-size:1.05rem;text-shadow:0 2px 6px rgba(0,0,0,.6)}
@@ -138,14 +141,11 @@ h2{font-size:1.75rem;text-align:center;margin-bottom:14px}
 .inclui{list-style:none;text-align:left;display:grid;gap:8px;margin:0 auto 18px;max-width:380px;font-size:.95rem}
 .inclui li{display:flex;gap:10px}
 .inclui li::before{content:"✓";color:var(--ok);font-weight:900}
-.inclui li.nao{color:#9b8f78}
-.inclui li.nao::before{content:"✕";color:#b9a98a}
 .de{color:#8b7d63;font-size:.95rem}
 .de s{color:#a33}
 .preco{font-family:var(--serif);color:var(--verde);font-size:3.2rem;font-weight:700;line-height:1;margin:4px 0 2px}
 .preco sup{font-size:1.2rem;vertical-align:top;margin-right:4px;position:relative;top:10px}
 .parcela{font-size:.88rem;color:var(--muted);margin-bottom:18px}
-.plano.basico .preco{font-size:2.4rem}
 .timer-box{background:var(--verde);color:#fff;border-radius:12px;padding:12px;margin:0 auto 18px;max-width:280px}
 .timer-box small{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ouro-2);font-weight:800}
 .timer-box b{font-family:var(--serif);font-size:2rem;font-variant-numeric:tabular-nums}
@@ -179,17 +179,6 @@ footer a{color:#d9cda9}
 .flutua.on{transform:none}
 .flutua .btn{padding:15px;font-size:1rem;animation:none;max-width:560px;margin:0 auto}
 
-/* POPUP DOWNSELL */
-.pop{position:fixed;inset:0;z-index:100;background:rgba(10,20,10,.72);display:none;align-items:center;justify-content:center;padding:18px}
-.pop.on{display:flex;animation:fade .25s}
-.pop .caixa{background:var(--branco);border-radius:18px;max-width:420px;width:100%;padding:28px 22px 22px;text-align:center;position:relative;border:3px solid var(--ouro);max-height:92vh;overflow:auto}
-.pop .fechar{position:absolute;top:8px;right:10px;background:none;border:0;font-size:1.8rem;line-height:1;color:var(--muted);cursor:pointer;padding:6px}
-.pop h3{font-size:1.5rem;margin:6px 0 8px}
-.pop p{color:var(--muted);font-size:.98rem;margin-bottom:12px}
-.pop .preco{font-size:2.6rem}
-.pop .nao-obg{display:block;margin-top:14px;font-size:.88rem;color:var(--muted);text-decoration:underline}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-
 /* REVEAL */
 .js .rv{opacity:0;transform:translateY(18px);transition:opacity .6s,transform .6s}
 .js .rv.vis{opacity:1;transform:none}
@@ -222,10 +211,13 @@ footer a{color:#d9cda9}
     <h1><em>57 receitas caseiras</em> dos antigos, explicadas passo a passo e com letra grande</h1>
     <p class="sub">Chás, xaropes, compressas e sucos que passaram de geração em geração, organizados num manual fácil de usar no celular, com os cuidados de cada receita.</p>
 
-    <!-- VSL: hoje aponta para assets/vsl.mp4 (172 MB). Para publicar, suba o vídeo no Vturb, Panda ou YouTube
-         e troque este <video> pelo iframe do player. -->
+    <!-- VSL no Vimeo. A camada "trava" cobre o player depois que o vídeo começa, para ninguém
+         mexer na barra de progresso; o script também desfaz qualquer avanço ou retrocesso. -->
     <div class="vsl">
-      <video id="vsl" src="assets/vsl.mp4" poster="assets/01-capa-manual.jpg" playsinline preload="metadata"></video>
+      <iframe id="vsl" src="https://player.vimeo.com/video/1244820342?controls=0&amp;playsinline=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;keyboard=0&amp;pip=0&amp;dnt=1" allow="autoplay; fullscreen" title="Vídeo: conheça O Manual dos Antigos"></iframe>
+      <button class="trava" id="travaVsl" type="button" aria-label="Pausar ou continuar o vídeo">
+        <span><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+      </button>
       <button class="play" id="playVsl" type="button" aria-label="Assistir ao vídeo">
         <span class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
         <b>Toque para assistir (2 min)</b>
@@ -384,7 +376,7 @@ footer a{color:#d9cda9}
   <div class="wrap">
     <div class="rv">
       <span class="kicker">Oferta especial</span>
-      <h2>Escolha como quer levar</h2>
+      <h2>Leve a coleção completa</h2>
       <p class="lead">Pagamento único. Sem mensalidade.</p>
     </div>
 
@@ -411,21 +403,8 @@ footer a{color:#d9cda9}
         <p class="preco"><sup>R$</sup><span data-preco="completo">27,90</span></p>
         <p class="parcela">pagamento único</p>
         <div class="timer-box"><small>Esta condição termina em</small><b data-timer>15:00</b></div>
-        <a class="btn" href="#checkout-premium" data-checkout="completo">QUERO A COLEÇÃO COMPLETA<small>acesso imediato no e-mail</small></a>
+        <a class="btn" href="#checkout" data-checkout>QUERO A COLEÇÃO COMPLETA<small>acesso imediato no e-mail</small></a>
         <div class="confianca"><span>🛡️ 7 dias de garantia</span><span>♾️ Vitalício</span><span>🔒 Compra segura</span></div>
-      </div>
-
-      <div class="plano basico rv">
-        <h3>Só o Manual</h3>
-        <p class="desc">Apenas o livro principal</p>
-        <ul class="inclui">
-          <li>O Manual dos Antigos: 57 receitas</li>
-          <li>Busca, letra grande e perfil de cuidado</li>
-          <li class="nao">Sem os 3 bônus</li>
-        </ul>
-        <p class="preco"><sup>R$</sup><span data-preco="basico">9,90</span></p>
-        <p class="parcela">pagamento único</p>
-        <a class="btn sec" href="#checkout-basico" data-checkout="basico" id="btnBasico">QUERO SÓ O MANUAL</a>
       </div>
     </div>
   </div>
@@ -461,7 +440,7 @@ footer a{color:#d9cda9}
     <details class="rv"><summary>Os ingredientes são difíceis de achar?</summary><p>Não. São coisas de feira, quintal e despensa: mel, limão, gengibre, alho, canela, camomila, hortelã, boldo e outras ervas conhecidas.</p></details>
     <details class="rv"><summary>O manual substitui o médico?</summary><p>Não. O manual reúne costumes e saberes tradicionais e não substitui orientação, diagnóstico ou tratamento de um profissional de saúde. Cada receita traz os cuidados e os sinais de quando procurar o médico.</p></details>
     <details class="rv"><summary>Eu tomo remédio todo dia. Posso usar?</summary><p>Converse sempre com seu médico antes. Para ajudar, o manual tem o "Meu perfil de cuidado": você marca se usa remédio para pressão, diabetes, anticoagulante ou calmante, e as receitas que pedem atenção ficam destacadas.</p></details>
-    <details class="rv"><summary>Qual a diferença entre os dois planos?</summary><p>O plano "Só o Manual" traz as 57 receitas. A "Coleção Completa" traz o manual e mais os 3 livros bônus: Bem-Estar Natural em Casa, Cultive no Seu Quintal e Noites de Paz.</p></details>
+    <details class="rv"><summary>Quais livros vêm na oferta?</summary><p>Você leva os 4: O Manual dos Antigos, com as 57 receitas, e os 3 bônus Bem-Estar Natural em Casa, Cultive no Seu Quintal e Noites de Paz.</p></details>
     <details class="rv"><summary>O acesso é para sempre?</summary><p>Sim. Pagamento único e acesso vitalício, sem mensalidade.</p></details>
     <details class="rv"><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia. Pediu, devolvemos o valor integral.</p></details>
   </div>
@@ -492,35 +471,12 @@ footer a{color:#d9cda9}
 <!-- CTA FLUTUANTE -->
 <div class="flutua" id="flutua"><a class="btn" href="#oferta">QUERO O MANUAL DOS ANTIGOS</a></div>
 
-<!-- 12. POPUP DOWNSELL -->
-<div class="pop" id="pop" role="dialog" aria-modal="true" aria-labelledby="popTit">
-  <div class="caixa">
-    <button class="fechar" type="button" id="popFechar" aria-label="Fechar">×</button>
-    <span class="kicker">Espera! Oferta só desta tela</span>
-    <h3 id="popTit">Por só R$ 10 a mais, leve os 3 bônus</h3>
-    <p>Em vez de levar só o Manual, leve a <strong>Coleção Completa com os 4 livros</strong> por um preço que não volta.</p>
-    <div class="mini-capas">
-      <img src="assets/01-capa-manual.jpg" alt="" loading="lazy">
-      <img src="assets/02-bonus-bem-estar.jpg" alt="" loading="lazy">
-      <img src="assets/03-bonus-quintal.jpg" alt="" loading="lazy">
-      <img src="assets/04-bonus-noites-de-paz.jpg" alt="" loading="lazy">
-    </div>
-    <p class="de">De <s>R$ <span data-preco="completo">27,90</span></s> por</p>
-    <p class="preco"><sup>R$</sup><span data-preco="downsell">19,90</span></p>
-    <a class="btn" href="#checkout-downsell" data-checkout="downsell" style="margin-top:14px">SIM, QUERO OS 4 LIVROS</a>
-    <a class="nao-obg" href="#checkout-basico" data-checkout="basico" data-direto>Não, obrigado. Quero só o Manual por R$ <span data-preco="basico">9,90</span></a>
-  </div>
-</div>
-
+<script src="https://player.vimeo.com/api/player.js"></script>
 <script>
-/* ===== CONFIGURAÇÃO: troque aqui preços e links do checkout ===== */
+/* ===== CONFIGURAÇÃO: troque aqui preço e link do checkout ===== */
 const CONFIG = {
-  precos: { ancora: "R$ 197,00", completo: "27,90", basico: "9,90", downsell: "19,90" },
-  checkout: {
-    completo: "#checkout-premium",   // link do checkout da Coleção Completa
-    basico:   "#checkout-basico",    // link do checkout Só o Manual
-    downsell: "#checkout-downsell"   // link do checkout Coleção Completa com desconto (popup)
-  },
+  precos: { ancora: "R$ 197,00", completo: "27,90" },
+  checkout: "https://app.zuptos.com.br/checkout/9d9d022f3c439fb8",
   timerMin: 15
 };
 
@@ -529,12 +485,10 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 // Preços
 $$('[data-preco]').forEach(el => { const v = CONFIG.precos[el.dataset.preco]; if (v) el.textContent = v; });
 
-// Links de checkout com UTMs repassadas da URL
+// Link do checkout com UTMs repassadas da URL
 const utm = location.search.replace(/^\?/, '');
 $$('[data-checkout]').forEach(a => {
-  let url = CONFIG.checkout[a.dataset.checkout] || a.getAttribute('href');
-  if (utm && /^https?:/.test(url)) url += (url.includes('?') ? '&' : '?') + utm;
-  a.href = url;
+  a.href = CONFIG.checkout + (utm ? (CONFIG.checkout.includes('?') ? '&' : '?') + utm : '');
 });
 
 // Timer regressivo (guardado por visitante)
@@ -554,29 +508,33 @@ $$('[data-checkout]').forEach(a => {
   tick(); setInterval(tick, 1000);
 })();
 
-// VSL
-const vsl = $('#vsl'), play = $('#playVsl');
-play.addEventListener('click', () => { play.remove(); vsl.controls = true; vsl.play(); });
-vsl.addEventListener('error', () => play.remove()); // vídeo ausente: fica só a capa
-
-// Popup downsell no plano básico (uma vez por visita)
-const pop = $('#pop');
-let popVisto = false;
-$('#btnBasico').addEventListener('click', e => {
-  if (popVisto) return;
-  e.preventDefault(); popVisto = true; pop.classList.add('on');
-});
-const fecharPop = () => pop.classList.remove('on');
-$('#popFechar').addEventListener('click', fecharPop);
-pop.addEventListener('click', e => { if (e.target === pop) fecharPop(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharPop(); });
+// VSL sem avançar nem retroceder
+const play = $('#playVsl'), trava = $('#travaVsl');
+if (window.Vimeo) {
+  const player = new Vimeo.Player($('#vsl'));
+  let ok = 0, tocando = false;
+  // Qualquer salto maior que o andamento normal volta para o ponto em que estava
+  player.on('timeupdate', d => {
+    if (Math.abs(d.seconds - ok) > 1.5) player.setCurrentTime(ok); else ok = d.seconds;
+  });
+  player.on('seeked', d => { if (Math.abs(d.seconds - ok) > 1.5) player.setCurrentTime(ok); });
+  player.on('play', () => { tocando = true; trava.classList.add('on'); trava.classList.remove('pausado'); });
+  player.on('pause', () => { tocando = false; trava.classList.add('pausado'); });
+  player.on('ended', () => { ok = 0; trava.classList.remove('on'); });
+  play.addEventListener('click', () => {
+    play.remove();
+    // Se o navegador bloquear o play via script, o próximo toque vai direto no player
+    player.play().catch(() => {});
+  });
+  trava.addEventListener('click', () => { tocando ? player.pause() : player.play().catch(() => {}); });
+} else {
+  play.addEventListener('click', () => play.remove());
+}
 
 // Eventos de pixel (só disparam se o pixel estiver instalado)
 const track = (ev, data) => { if (window.fbq) fbq('track', ev, data); };
 $$('[data-checkout]').forEach(a => a.addEventListener('click', () => {
-  if (a.id === 'btnBasico' && pop.classList.contains('on')) return;
-  const v = parseFloat(CONFIG.precos[a.dataset.checkout].replace(',', '.'));
-  track('InitiateCheckout', { value: v, currency: 'BRL' });
+  track('InitiateCheckout', { value: parseFloat(CONFIG.precos.completo.replace(',', '.')), currency: 'BRL' });
 }));
 
 // Animação ao rolar + ViewContent na oferta + CTA flutuante
