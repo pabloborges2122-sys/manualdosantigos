@@ -65,6 +65,10 @@ h2{font-size:1.75rem;text-align:center;margin-bottom:14px}
 .vsl{position:relative;width:100%;max-width:340px;margin:0 auto 26px;aspect-ratio:9/16;border-radius:16px;overflow:hidden;border:5px solid var(--branco);box-shadow:0 20px 50px rgba(30,58,30,.35);background:#000}
 .vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .vsl .play{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:28px;gap:10px;background:linear-gradient(to top,rgba(0,0,0,.75),rgba(0,0,0,0) 55%),url(assets/01-capa-manual.jpg) center/cover;border:0;cursor:pointer;color:#fff;font:inherit}
+.vsl .play.mudo{background:linear-gradient(to top,rgba(0,0,0,.6),rgba(0,0,0,0) 40%)}
+.vsl .play.mudo span.ic{width:64px;height:64px;animation:none;box-shadow:0 0 0 6px rgba(255,255,255,.25)}
+.vsl .play.mudo span.ic svg{display:none}
+.vsl .play.mudo span.ic::before{content:"🔊";font-size:1.7rem}
 .vsl .trava{position:absolute;inset:0;z-index:2;display:none;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;padding:0}
 .vsl .trava.on{display:flex}
 .vsl .trava span{display:none;width:76px;height:76px;border-radius:50%;background:rgba(194,65,12,.92);place-items:center}
@@ -214,13 +218,13 @@ footer a{color:#d9cda9}
     <!-- VSL no Vimeo. A camada "trava" cobre o player depois que o vídeo começa, para ninguém
          mexer na barra de progresso; o script também desfaz qualquer avanço ou retrocesso. -->
     <div class="vsl">
-      <iframe id="vsl" src="https://player.vimeo.com/video/1244820342?controls=0&amp;playsinline=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;keyboard=0&amp;pip=0&amp;dnt=1" allow="autoplay; fullscreen" title="Vídeo: conheça O Manual dos Antigos"></iframe>
+      <iframe id="vsl" src="https://player.vimeo.com/video/1244820342?autoplay=1&amp;muted=1&amp;controls=0&amp;playsinline=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;keyboard=0&amp;pip=0&amp;dnt=1" allow="autoplay; fullscreen" title="Vídeo: conheça O Manual dos Antigos"></iframe>
       <button class="trava" id="travaVsl" type="button" aria-label="Pausar ou continuar o vídeo">
         <span><svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
       </button>
       <button class="play" id="playVsl" type="button" aria-label="Assistir ao vídeo">
         <span class="ic"><svg width="34" height="34" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
-        <b>Toque para assistir (2 min)</b>
+        <b id="playTxt">Toque para assistir (2 min)</b>
       </button>
     </div>
 
@@ -518,12 +522,20 @@ if (window.Vimeo) {
     if (Math.abs(d.seconds - ok) > 1.5) player.setCurrentTime(ok); else ok = d.seconds;
   });
   player.on('seeked', d => { if (Math.abs(d.seconds - ok) > 1.5) player.setCurrentTime(ok); });
-  player.on('play', () => { tocando = true; trava.classList.add('on'); trava.classList.remove('pausado'); });
+  // O vídeo começa sozinho e sem som (os navegadores só liberam assim). O 1º toque liga o som
+  // e recomeça do início, para a pessoa ouvir a VSL desde a primeira frase.
+  player.on('play', () => {
+    tocando = true; trava.classList.add('on'); trava.classList.remove('pausado');
+    if (play.isConnected) { play.classList.add('mudo'); $('#playTxt').textContent = 'Toque para ativar o som'; }
+  });
   player.on('pause', () => { tocando = false; trava.classList.add('pausado'); });
   player.on('ended', () => { ok = 0; trava.classList.remove('on'); });
   play.addEventListener('click', () => {
     play.remove();
-    // Se o navegador bloquear o play via script, o próximo toque vai direto no player
+    ok = 0;
+    player.setMuted(false).catch(() => {});
+    player.setVolume(1).catch(() => {});
+    player.setCurrentTime(0).catch(() => {});
     player.play().catch(() => {});
   });
   trava.addEventListener('click', () => { tocando ? player.pause() : player.play().catch(() => {}); });
