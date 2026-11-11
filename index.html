@@ -540,10 +540,27 @@ if (window.Vimeo) {
   player.on('seeked', d => { if (Math.abs(d.seconds - ok) > 1.5) player.setCurrentTime(ok); });
   // O vídeo começa sozinho e sem som (os navegadores só liberam assim). O 1º toque liga o som
   // e recomeça do início, para a pessoa ouvir a VSL desde a primeira frase.
+  let tentouSom = false;
   player.on('play', () => {
     tocando = true; trava.classList.add('on'); trava.classList.remove('pausado');
-    if (play.isConnected) { play.classList.add('mudo'); $('#playTxt').textContent = 'Toque para ativar o som'; }
+    if (!play.isConnected) return;
+    play.classList.add('mudo'); $('#playTxt').textContent = 'Toque para ativar o som';
+    // Tenta ligar o som sozinho. Se o navegador não deixar, o vídeo segue mudo com o botão 🔊
+    if (tentouSom) return;
+    tentouSom = true;
+    player.setMuted(false).then(() => player.setVolume(1)).catch(() => {});
+    setTimeout(async () => {
+      try {
+        if (await player.getPaused()) { await player.setMuted(true); await player.play(); }
+        else if (!(await player.getMuted()) && play.isConnected) play.remove();
+      } catch (e) {}
+    }, 900);
   });
+  // Qualquer toque ou tecla na página conta como permissão do usuário: liga o som sem reiniciar
+  ['pointerdown', 'keydown', 'touchend'].forEach(ev => addEventListener(ev, () => {
+    if (!play.isConnected) return;
+    player.setMuted(false).then(() => player.setVolume(1)).then(() => play.remove()).catch(() => {});
+  }, { once: true }));
   player.on('pause', () => { tocando = false; trava.classList.add('pausado'); });
   player.on('ended', () => { ok = 0; trava.classList.remove('on'); });
   play.addEventListener('click', () => {
