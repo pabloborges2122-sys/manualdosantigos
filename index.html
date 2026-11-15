@@ -256,7 +256,7 @@ footer a{color:#d4c79f}
 .flutua .btn{min-height:54px;font-size:1.02rem;max-width:560px;margin:0 auto}
 .flutua .btn::after{display:none}
 
-/* Liberação por etapas: o resto da página só aparece depois de 70% da VSL */
+/* Liberação por etapas: o resto da página só aparece depois de 50% da VSL */
 .trancado{display:none!important}
 .liberando{animation:surge 1s var(--ease)}
 @keyframes surge{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
@@ -395,7 +395,7 @@ footer a{color:#d4c79f}
   </div>
 </section>
 
-<!-- ===== Daqui até a chamada final só aparece depois de 70% da VSL (ver liberar() no script) ===== -->
+<!-- ===== Daqui até a chamada final só aparece depois de 50% da VSL (ver liberar() no script) ===== -->
 <div id="resto" class="trancado">
 
 <!-- 4. POR DENTRO -->
@@ -634,9 +634,9 @@ $$('[data-checkout]').forEach(a => {
   tick(); setInterval(tick, 1000);
 })();
 
-// Liberação por etapas: o resto da página só aparece depois de 70% da VSL assistida.
+// Liberação por etapas: o resto da página só aparece depois de 50% da VSL assistida.
 // Quem já liberou uma vez (ou chega com ?liberado no link) vê tudo direto.
-const LIBERA_EM = 0.70, LIBERA_MAX_MS = 180000;
+const LIBERA_EM = 0.50, LIBERA_MAX_MS = 180000;
 let liberado = false;
 function liberar() {
   if (liberado) return;
