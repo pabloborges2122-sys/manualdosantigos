@@ -256,18 +256,6 @@ footer a{color:#d4c79f}
 .flutua .btn{min-height:54px;font-size:1.02rem;max-width:560px;margin:0 auto}
 .flutua .btn::after{display:none}
 
-/* Liberação por etapas: o resto da página só aparece depois de 50% da VSL */
-.trancado{display:none!important}
-.liberando{animation:surge 1s var(--ease)}
-@keyframes surge{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.aviso-vsl{text-align:center;background:var(--mata);color:#efe4c6;border-radius:20px;padding:28px 22px;margin-top:8px}
-.aviso-vsl .cad{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;background:rgba(233,169,59,.15);color:var(--mel)}
-.aviso-vsl .cad .ic{width:26px;height:26px}
-.aviso-vsl h3{color:#fbf2da;font-size:1.3rem;margin-bottom:8px}
-.aviso-vsl p{color:#d4c79f;font-size:.98rem;margin-bottom:18px}
-.aviso-vsl a{display:inline-flex;align-items:center;gap:8px;color:var(--mel);font-weight:700;text-decoration:none;border:1.5px solid var(--mel);border-radius:12px;padding:12px 20px}
-.aviso-vsl a:hover{background:var(--mel);color:var(--mel-t)}
-
 /* Entrada suave das seções */
 .js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .js .rv.vis{opacity:1;transform:none}
@@ -346,7 +334,7 @@ footer a{color:#d4c79f}
       </div>
     </div>
 
-    <div class="acao trancado" id="heroAcao">
+    <div class="acao">
       <a class="btn" href="#oferta">Quero o Manual dos Antigos<small>e levar os 3 livros de presente</small></a>
       <div class="seguro"><span><svg class="ic"><use href="#i-cadeado"/></svg>Compra segura</span><span><svg class="ic"><use href="#i-raio"/></svg>Acesso na hora</span><span><svg class="ic"><use href="#i-escudo"/></svg>7 dias de garantia</span></div>
     </div>
@@ -385,18 +373,8 @@ footer a{color:#d4c79f}
       <p><strong>Esse saber está sumindo.</strong> Quem sabia de cor muitas vezes não anotou nada. E o que se acha na internet é receita solta: sem medida, sem o modo certo de preparar e sem dizer quem não deve tomar.</p>
       <p>Foi para isso que nasceu <strong>O Manual dos Antigos</strong>: tudo num lugar só, com medida, passo a passo e os cuidados de cada receita, do jeito que a vó explicaria.</p>
     </div>
-    <!-- Aparece enquanto o resto da página está trancado -->
-    <div class="aviso-vsl" id="avisoVsl" style="margin-top:40px">
-      <div class="cad"><svg class="ic"><use href="#i-cadeado"/></svg></div>
-      <h3>O resto você descobre no vídeo</h3>
-      <p>As receitas por dentro, os 3 presentes e a condição especial de hoje aparecem aqui embaixo enquanto você assiste.</p>
-      <a href="#topo"><svg class="ic"><use href="#i-som"/></svg>Voltar para o vídeo</a>
-    </div>
   </div>
 </section>
-
-<!-- ===== Daqui até a chamada final só aparece depois de 50% da VSL (ver liberar() no script) ===== -->
-<div id="resto" class="trancado">
 
 <!-- 4. POR DENTRO -->
 <section class="dentro" style="background:var(--papel)">
@@ -584,8 +562,6 @@ footer a{color:#d4c79f}
   </div>
 </section>
 
-</div><!-- /#resto -->
-
 <footer>
   <div class="wrap">
     <p>© 2026 O Manual dos Antigos. Todos os direitos reservados.</p>
@@ -634,30 +610,11 @@ $$('[data-checkout]').forEach(a => {
   tick(); setInterval(tick, 1000);
 })();
 
-// Liberação por etapas: o resto da página só aparece depois de 50% da VSL assistida.
-// Quem já liberou uma vez (ou chega com ?liberado no link) vê tudo direto.
-const LIBERA_EM = 0.50, LIBERA_MAX_MS = 180000;
-let liberado = false;
-function liberar() {
-  if (liberado) return;
-  liberado = true;
-  try { localStorage.setItem('mda_lib', '1'); } catch (e) {}
-  ['#resto', '#heroAcao'].forEach(s => { const el = $(s); el.classList.remove('trancado'); el.classList.add('liberando'); });
-  $('#avisoVsl').remove();
-  $('#trilho').dispatchEvent(new Event('scroll'));
-  if (typeof upd === 'function') upd();
-}
-let jaLiberou = false;
-try { jaLiberou = localStorage.getItem('mda_lib') === '1'; } catch (e) {}
-if (jaLiberou || /liberado/.test(location.search)) setTimeout(liberar, 0); // depois do script inteiro carregar
-// Rede de segurança: se o vídeo não tocar por algum motivo, libera depois de 3 minutos na página
-setTimeout(liberar, LIBERA_MAX_MS);
-
 // VSL sem avançar nem retroceder
 const play = $('#playVsl'), trava = $('#travaVsl'), barra = $('#tempoBarra');
 if (window.Vimeo) {
   const player = new Vimeo.Player($('#vsl'));
-  let ok = 0, tocando = false, maxVisto = 0;
+  let ok = 0, tocando = false;
   // Qualquer salto maior que o andamento normal volta para o ponto em que estava
   player.on('timeupdate', d => {
     if (Math.abs(d.seconds - ok) > 1.5) { player.setCurrentTime(ok); return; }
@@ -665,8 +622,6 @@ if (window.Vimeo) {
     const p = d.duration ? d.seconds / d.duration : 0;
     // Minutagem "fake": corre no começo e vai desacelerando até o fim
     barra.style.width = (100 * (1 - Math.pow(1 - p, 2.4))).toFixed(2) + '%';
-    maxVisto = Math.max(maxVisto, p);
-    if (maxVisto >= LIBERA_EM) liberar();
   });
   player.on('seeked', d => { if (Math.abs(d.seconds - ok) > 1.5) player.setCurrentTime(ok); });
   // O vídeo começa sozinho e sem som (os navegadores só liberam assim). O 1º toque liga o som
@@ -704,9 +659,7 @@ if (window.Vimeo) {
   });
   trava.addEventListener('click', () => { tocando ? player.pause() : player.play().catch(() => {}); });
 } else {
-  // Sem o player do Vimeo não há como medir o vídeo: libera a página inteira
   play.addEventListener('click', () => play.remove());
-  setTimeout(liberar, 0);
 }
 
 // Carrossel "por dentro": pontos que acompanham o arraste
@@ -774,7 +727,7 @@ $$('.rv').forEach(el => io.observe(el));
 io.observe(oferta);
 
 let ofertaVisivel = false, heroVisivel = true;
-function upd() { flutua.classList.toggle('on', liberado && !heroVisivel && !ofertaVisivel); }
+const upd = () => flutua.classList.toggle('on', !heroVisivel && !ofertaVisivel);
 new IntersectionObserver(([e]) => { heroVisivel = e.isIntersecting; upd(); }).observe(hero);
 new IntersectionObserver(([e]) => { ofertaVisivel = e.isIntersecting; upd(); }, { threshold: .05 }).observe(oferta);
 </script>
