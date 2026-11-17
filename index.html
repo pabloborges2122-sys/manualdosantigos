@@ -111,6 +111,7 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .vsl .play .bola svg{width:30px;height:30px;fill:currentColor;stroke:none;margin-left:4px}
 .vsl .play .bola .som{display:none;width:30px;height:30px;margin:0}
 .vsl .play b{font-size:1rem;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.vsl .play.oculto{display:none}
 .vsl .play.mudo{background:linear-gradient(to top,rgba(10,25,14,.7),rgba(10,25,14,0) 38%)}
 .vsl .play.mudo .bola{width:62px;height:62px}
 .vsl .play.mudo .bola .tri{display:none}
@@ -614,52 +615,68 @@ $$('[data-checkout]').forEach(a => {
 const play = $('#playVsl'), trava = $('#travaVsl'), barra = $('#tempoBarra');
 if (window.Vimeo) {
   const player = new Vimeo.Player($('#vsl'));
-  let ok = 0, tocando = false;
-  // Qualquer salto maior que o andamento normal volta para o ponto em que estava
+  // Estados: o vídeo começa sozinho e MUDO (é o único jeito que os navegadores permitem).
+  // O botão grande fica por cima até a pessoa tocar: aí o som liga e a VSL recomeça do início.
+  let ultimo = 0, nossoSalto = false, comSom = false;
+  const txt = $('#playTxt');
+  const mostrarBotao = mudo => {
+    play.classList.toggle('mudo', mudo);
+    txt.textContent = mudo ? 'Toque para ativar o som' : 'Toque para assistir';
+    play.classList.remove('oculto');
+  };
+  const pular = t => { nossoSalto = true; return player.setCurrentTime(t).catch(() => {}).finally(() => { nossoSalto = false; }); };
+
   player.on('timeupdate', d => {
-    if (Math.abs(d.seconds - ok) > 1.5) { player.setCurrentTime(ok); return; }
-    ok = d.seconds;
+    ultimo = d.seconds;
     const p = d.duration ? d.seconds / d.duration : 0;
     // Minutagem "fake": corre no começo e vai desacelerando até o fim
     barra.style.width = (100 * (1 - Math.pow(1 - p, 2.4))).toFixed(2) + '%';
   });
-  player.on('seeked', d => { if (Math.abs(d.seconds - ok) > 1.5) player.setCurrentTime(ok); });
-  // O vídeo começa sozinho e sem som (os navegadores só liberam assim). O 1º toque liga o som
-  // e recomeça do início, para a pessoa ouvir a VSL desde a primeira frase.
-  let tentouSom = false;
+  // Trava de avançar/voltar: só desfaz saltos que não foram feitos por esta página.
+  // (Engasgo de internet ou aba em segundo plano não contam como salto.)
+  player.on('seeked', d => {
+    if (!nossoSalto && Math.abs(d.seconds - ultimo) > 2) pular(ultimo);
+  });
+
   player.on('play', () => {
-    tocando = true; trava.classList.add('on'); trava.classList.remove('pausado');
-    if (!play.isConnected) return;
-    play.classList.add('mudo'); $('#playTxt').textContent = 'Toque para ativar o som';
-    // Tenta ligar o som sozinho. Se o navegador não deixar, o vídeo segue mudo com o botão de som
-    if (tentouSom) return;
-    tentouSom = true;
-    player.setMuted(false).then(() => player.setVolume(1)).catch(() => {});
+    trava.classList.add('on'); trava.classList.remove('pausado');
+    if (!comSom) mostrarBotao(true);
+  });
+  // Se o vídeo começou antes do script ficar pronto, o aviso de "play" se perdeu: confere direto no player
+  player.ready().then(() => player.getPaused()).then(pausado => {
+    if (!pausado && !comSom) { trava.classList.add('on'); mostrarBotao(true); }
+  }).catch(() => {});
+  player.on('pause', () => { if (comSom) trava.classList.add('pausado'); });
+  player.on('ended', () => { trava.classList.remove('on'); barra.style.width = '100%'; });
+
+  // Toque no botão grande: liga o som, volta ao início e toca
+  play.addEventListener('click', () => {
+    play.classList.add('oculto');
+    comSom = true; ultimo = 0;
+    // Os comandos saem dentro do próprio toque, que é o que os navegadores exigem para liberar o som
+    player.setVolume(1).catch(() => {});
+    player.setMuted(false).catch(() => {});
+    pular(0);
+    player.play().catch(() => {});
+    // Confere se o navegador aceitou. Se o som foi bloqueado, segue mudo e o botão volta
     setTimeout(async () => {
       try {
-        if (await player.getPaused()) { await player.setMuted(true); await player.play(); }
-        else if (!(await player.getMuted()) && play.isConnected) play.remove();
+        const [pausado, mudo] = await Promise.all([player.getPaused(), player.getMuted()]);
+        if (mudo || pausado) {
+          comSom = false;
+          if (pausado) { await player.setMuted(true); await player.play(); }
+          mostrarBotao(true);
+        }
       } catch (e) {}
-    }, 900);
+    }, 1200);
   });
-  // Qualquer toque ou tecla na página conta como permissão do usuário: liga o som sem reiniciar
-  ['pointerdown', 'keydown', 'touchend'].forEach(ev => addEventListener(ev, () => {
-    if (!play.isConnected) return;
-    player.setMuted(false).then(() => player.setVolume(1)).then(() => play.remove()).catch(() => {});
-  }, { once: true }));
-  player.on('pause', () => { tocando = false; trava.classList.add('pausado'); });
-  player.on('ended', () => { ok = 0; trava.classList.remove('on'); });
-  play.addEventListener('click', () => {
-    play.remove();
-    ok = 0;
-    player.setMuted(false).catch(() => {});
-    player.setVolume(1).catch(() => {});
-    player.setCurrentTime(0).catch(() => {});
-    player.play().catch(() => {});
+
+  // Toque no vídeo depois que ele já está com som: pausa ou continua conforme o estado real do player
+  trava.addEventListener('click', async () => {
+    try { (await player.getPaused()) ? player.play().catch(() => {}) : player.pause(); } catch (e) {}
   });
-  trava.addEventListener('click', () => { tocando ? player.pause() : player.play().catch(() => {}); });
 } else {
-  play.addEventListener('click', () => play.remove());
+  play.addEventListener('click', () => play.classList.add('oculto'));
 }
 
 // Carrossel "por dentro": pontos que acompanham o arraste
