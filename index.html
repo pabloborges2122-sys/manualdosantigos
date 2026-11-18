@@ -241,8 +241,9 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .depos-trilho .depo{margin-right:14px}
 .depo{flex:0 0 250px;background:#fff;border:1px solid var(--perg-2);border-radius:14px;padding:14px 16px}
 .depo-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.depo-av{flex:0 0 34px;height:34px;border-radius:50%;background:var(--folha);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.95rem}
-.depo-av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.depo-av{position:relative;flex:0 0 46px;width:46px;height:46px;border-radius:50%;overflow:hidden;background:var(--folha);color:#fff;display:grid;place-items:center;font-weight:700;font-size:1.05rem;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--ouro)}
+.depo-av img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.depo-av img:not(.ok){opacity:0}
 .depo-top b{display:block;font-size:.92rem;line-height:1.2}
 .depo-top small{display:block;font-size:.76rem;color:#6b6152;line-height:1.3}
 .depo-top i{font-style:normal;color:#e0a100;font-size:.8rem;letter-spacing:1px}
@@ -734,6 +735,7 @@ if (CONFIG.depoimentos.length) {
     const av = el.querySelector('.depo-av');
     if (d.foto) {
       const img = new Image(); img.src = d.foto; img.alt = '';
+      img.onload = () => img.classList.add('ok');
       img.onerror = () => { av.textContent = d.nome.trim()[0]; };  // foto não encontrada: volta para a inicial
       av.appendChild(img);
     } else av.textContent = d.nome.trim()[0];
