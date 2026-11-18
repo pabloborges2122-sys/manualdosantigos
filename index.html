@@ -580,7 +580,7 @@ footer a{color:#d4c79f}
 </section>
 
 <!-- 9. PROVA SOCIAL: carrossel que passa sozinho e devagar, sem arrastar.
-     Fica escondido até existir depoimento em CONFIG.depoimentos (no script, lá embaixo). -->
+     Fica escondido até você preencher a lista DEPOIMENTOS (no script, procure "PREENCHA AQUI"). -->
 <section class="depos" id="depoimentos" hidden>
   <h2>O que estão dizendo</h2>
   <div class="depos-janela" aria-label="Depoimentos de clientes">
@@ -641,24 +641,76 @@ const CONFIG = {
   precos: { completo: "37,00" },
   checkout: "https://go.perfectpay.com.br/PPU38CQHSEH",
   suporte: "",  // ex.: "contato@seudominio.com.br" — vazio esconde a linha de suporte no rodapé
-  // DEPOIMENTOS — lista vazia esconde a seção inteira.
-  // 1) Suba a foto (quadrada, .jpg) em assets/depoimentos/ (ex.: assets/depoimentos/maria.jpg)
-  // 2) Copie o modelo abaixo para dentro dos colchetes, um bloco por pessoa, separados por vírgula.
-  // 3) "foto", "idade" e "cidade" são opcionais: sem foto aparece a inicial do nome.
-  //    Aspas dentro do texto: use \" ou troque por aspas simples.
-  //
-  // MODELO:
-  //   {
-  //     nome:   "Nome da pessoa",
-  //     idade:  60,
-  //     cidade: "Cidade • UF",
-  //     foto:   "assets/depoimentos/arquivo.jpg",
-  //     texto:  "Texto do depoimento."
-  //   },
-  depoimentos: [
-
-  ]
 };
+
+/* ==========================================================================
+   DEPOIMENTOS — PREENCHA AQUI
+   --------------------------------------------------------------------------
+   Escreva SEMPRE entre as aspas "". Não apague aspas, vírgulas nem chaves { }.
+   - nome   → ex.: "Maria Silva"
+   - idade  → ex.: "62"            (só o número)
+   - cidade → ex.: "Uberaba • MG"
+   - foto   → nome do arquivo que você subiu na pasta assets/depoimentos/
+              ex.: "maria.jpg"     (deixe "" se não tiver foto: aparece a inicial)
+   - texto  → o depoimento. Se tiver aspas no texto, use aspas simples ' '
+   Espaço que ficar com nome ou texto vazio NÃO aparece no site.
+   Se todos ficarem vazios, a seção inteira fica escondida.
+   ========================================================================== */
+const DEPOIMENTOS = [
+
+  { // ---------- DEPOIMENTO 1 ----------
+    nome:   "",
+    idade:  "",
+    cidade: "",
+    foto:   "",
+    texto:  ""
+  },
+
+  { // ---------- DEPOIMENTO 2 ----------
+    nome:   "",
+    idade:  "",
+    cidade: "",
+    foto:   "",
+    texto:  ""
+  },
+
+  { // ---------- DEPOIMENTO 3 ----------
+    nome:   "",
+    idade:  "",
+    cidade: "",
+    foto:   "",
+    texto:  ""
+  },
+
+  { // ---------- DEPOIMENTO 4 ----------
+    nome:   "",
+    idade:  "",
+    cidade: "",
+    foto:   "",
+    texto:  ""
+  },
+
+  { // ---------- DEPOIMENTO 5 ----------
+    nome:   "",
+    idade:  "",
+    cidade: "",
+    foto:   "",
+    texto:  ""
+  },
+
+  { // ---------- DEPOIMENTO 6 ----------
+    nome:   "",
+    idade:  "",
+    cidade: "",
+    foto:   "",
+    texto:  ""
+  },
+
+];
+/* ===================== FIM DOS DEPOIMENTOS ===================== */
+CONFIG.depoimentos = DEPOIMENTOS
+  .filter(d => String(d.nome || '').trim() && String(d.texto || '').trim())
+  .map(d => ({ ...d, foto: d.foto && !d.foto.includes('/') ? 'assets/depoimentos/' + d.foto : d.foto }));
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -684,7 +736,8 @@ if (CONFIG.depoimentos.length) {
       av.appendChild(img);
     } else av.textContent = d.nome.trim()[0];
     el.querySelector('b').textContent = d.nome;
-    const info = [d.idade ? d.idade + ' anos' : '', d.cidade || ''].filter(Boolean).join(' · ');
+    const idade = String(d.idade || '').trim(), cidade = String(d.cidade || '').trim();
+    const info = [idade ? idade.replace(/\s*anos$/i, '') + ' anos' : '', cidade].filter(Boolean).join(' · ');
     const sm = el.querySelector('small');
     if (info) sm.textContent = info; else sm.remove();
     el.querySelector('p').textContent = d.texto;
