@@ -242,7 +242,9 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .depo{flex:0 0 250px;background:#fff;border:1px solid var(--perg-2);border-radius:14px;padding:14px 16px}
 .depo-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .depo-av{flex:0 0 34px;height:34px;border-radius:50%;background:var(--folha);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.95rem}
+.depo-av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 .depo-top b{display:block;font-size:.92rem;line-height:1.2}
+.depo-top small{display:block;font-size:.76rem;color:#6b6152;line-height:1.3}
 .depo-top i{font-style:normal;color:#e0a100;font-size:.8rem;letter-spacing:1px}
 .depo p{font-size:.9rem;line-height:1.4;color:var(--tinta)}
 
@@ -639,9 +641,23 @@ const CONFIG = {
   precos: { completo: "37,00" },
   checkout: "https://go.perfectpay.com.br/PPU38CQHSEH",
   suporte: "",  // ex.: "contato@seudominio.com.br" — vazio esconde a linha de suporte no rodapé
-  // Só depoimentos REAIS de quem comprou o manual. Lista vazia esconde a seção.
-  // Formato: { nome: "Maria S.", texto: "Achei a receita que minha mãe fazia." }
-  depoimentos: []
+  // DEPOIMENTOS — lista vazia esconde a seção inteira.
+  // 1) Suba a foto (quadrada, .jpg) em assets/depoimentos/ (ex.: assets/depoimentos/maria.jpg)
+  // 2) Copie o modelo abaixo para dentro dos colchetes, um bloco por pessoa, separados por vírgula.
+  // 3) "foto", "idade" e "cidade" são opcionais: sem foto aparece a inicial do nome.
+  //    Aspas dentro do texto: use \" ou troque por aspas simples.
+  //
+  // MODELO:
+  //   {
+  //     nome:   "Nome da pessoa",
+  //     idade:  60,
+  //     cidade: "Cidade • UF",
+  //     foto:   "assets/depoimentos/arquivo.jpg",
+  //     texto:  "Texto do depoimento."
+  //   },
+  depoimentos: [
+
+  ]
 };
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -660,9 +676,17 @@ $$('[data-checkout]').forEach(a => {
 if (CONFIG.depoimentos.length) {
   const card = d => {
     const el = document.createElement('div'); el.className = 'depo';
-    el.innerHTML = '<div class="depo-top"><span class="depo-av"></span><div><b></b><i>★★★★★</i></div></div><p></p>';
-    el.querySelector('.depo-av').textContent = d.nome.trim()[0];
+    el.innerHTML = '<div class="depo-top"><span class="depo-av"></span><div><b></b><small></small><i>★★★★★</i></div></div><p></p>';
+    const av = el.querySelector('.depo-av');
+    if (d.foto) {
+      const img = new Image(); img.src = d.foto; img.alt = ''; img.loading = 'lazy';
+      img.onerror = () => { av.textContent = d.nome.trim()[0]; };  // foto não encontrada: volta para a inicial
+      av.appendChild(img);
+    } else av.textContent = d.nome.trim()[0];
     el.querySelector('b').textContent = d.nome;
+    const info = [d.idade ? d.idade + ' anos' : '', d.cidade || ''].filter(Boolean).join(' · ');
+    const sm = el.querySelector('small');
+    if (info) sm.textContent = info; else sm.remove();
     el.querySelector('p').textContent = d.texto;
     return el;
   };
