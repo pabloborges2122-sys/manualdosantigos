@@ -355,7 +355,7 @@ footer a{color:#d4c79f}
          mexer na barra de progresso; o script também desfaz qualquer avanço ou retrocesso. -->
     <div class="vsl-moldura">
       <div class="vsl">
-        <iframe id="vsl" src="https://player.vimeo.com/video/1248033234?autoplay=1&amp;muted=1&amp;controls=0&amp;playsinline=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;keyboard=0&amp;pip=0&amp;dnt=1" allow="autoplay; fullscreen" title="Vídeo: conheça O Manual dos Antigos"></iframe>
+        <iframe id="vsl" src="https://player.vimeo.com/video/1248033234?autoplay=1&amp;muted=0&amp;controls=0&amp;playsinline=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;keyboard=0&amp;pip=0&amp;dnt=1" allow="autoplay; fullscreen" title="Vídeo: conheça O Manual dos Antigos"></iframe>
         <button class="trava" id="travaVsl" type="button" aria-label="Pausar ou continuar o vídeo">
           <span class="bola"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
         </button>
@@ -785,8 +785,9 @@ if (CONFIG.suporte) {
 const play = $('#playVsl'), trava = $('#travaVsl'), barra = $('#tempoBarra');
 if (window.Vimeo) {
   const player = new Vimeo.Player($('#vsl'));
-  // Estados: o vídeo começa sozinho e MUDO (é o único jeito que os navegadores permitem).
-  // O botão grande fica por cima até a pessoa tocar: aí o som liga e a VSL recomeça do início.
+  // O vídeo TENTA começar sozinho e COM SOM. Quando o navegador bloqueia o som (celulares quase
+  // sempre bloqueiam antes do primeiro toque), ele começa mudo e aparece "Toque para ativar o som".
+  // O som liga no toque no vídeo ou no primeiro toque em qualquer lugar da página, e a VSL recomeça do início.
   let ultimo = 0, nossoSalto = false, comSom = false;
   const txt = $('#playTxt');
   const mostrarBotao = mudo => {
@@ -808,19 +809,29 @@ if (window.Vimeo) {
     if (!nossoSalto && Math.abs(d.seconds - ultimo) > 2) pular(ultimo);
   });
 
-  player.on('play', () => {
-    trava.classList.add('on'); trava.classList.remove('pausado');
-    if (!comSom) mostrarBotao(true);
-  });
-  // Se o vídeo começou antes do script ficar pronto, o aviso de "play" se perdeu: confere direto no player
-  player.ready().then(() => player.getPaused()).then(pausado => {
-    if (!pausado && !comSom) { trava.classList.add('on'); mostrarBotao(true); }
-  }).catch(() => {});
+  // Confere se o vídeo está tocando com som ou mudo e ajusta o botão
+  const conferir = async () => {
+    try {
+      const [pausado, mudo, vol] = await Promise.all([player.getPaused(), player.getMuted(), player.getVolume()]);
+      if (pausado) return false;
+      trava.classList.add('on');
+      if (!mudo && vol > 0) { comSom = true; play.classList.add('oculto'); }
+      else if (!comSom) mostrarBotao(true);
+      return true;
+    } catch (e) { return false; }
+  };
+  player.on('play', () => { trava.classList.add('on'); trava.classList.remove('pausado'); conferir(); });
+  // Se o vídeo começou antes do script ficar pronto, o aviso de "play" se perdeu: confere direto no player.
+  // Se o navegador travou o vídeo por causa do som, recomeça mudo (aí ele sempre deixa tocar).
+  player.ready().then(() => setTimeout(async () => {
+    if (comSom || await conferir()) return;
+    try { await player.setMuted(true); await player.play(); conferir(); } catch (e) {}
+  }, 1500)).catch(() => {});
   player.on('pause', () => { if (comSom) trava.classList.add('pausado'); });
   player.on('ended', () => { trava.classList.remove('on'); barra.style.width = '100%'; });
 
-  // Toque no botão grande: liga o som, volta ao início e toca
-  play.addEventListener('click', () => {
+  // Liga o som, volta ao início e toca
+  const ligarSom = () => {
     play.classList.add('oculto');
     comSom = true; ultimo = 0;
     // Os comandos saem dentro do próprio toque, que é o que os navegadores exigem para liberar o som
@@ -839,7 +850,18 @@ if (window.Vimeo) {
         }
       } catch (e) {}
     }, 1200);
-  });
+  };
+  play.addEventListener('click', ligarSom);
+
+  // Primeiro toque em qualquer lugar da página também liga o som, se a VSL estiver na tela
+  let vslNaTela = true;
+  if ('IntersectionObserver' in window) new IntersectionObserver(e => { vslNaTela = e[0].isIntersecting; }, { threshold: .4 }).observe($('.vsl'));
+  const primeiroToque = e => {
+    if (comSom || e.target.closest('.vsl')) return;
+    ['click', 'keydown'].forEach(t => removeEventListener(t, primeiroToque, true));
+    if (vslNaTela) ligarSom();
+  };
+  ['click', 'keydown'].forEach(t => addEventListener(t, primeiroToque, true));
 
   // Toque no vídeo depois que ele já está com som: pausa ou continua conforme o estado real do player
   trava.addEventListener('click', async () => {
