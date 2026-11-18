@@ -237,8 +237,8 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .depos{padding:40px 0;background:var(--papel);overflow:hidden}
 .depos h2{font-size:1.35rem;margin-bottom:18px}
 .depos-janela{overflow:hidden;pointer-events:none;user-select:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.depos-trilho{display:flex;gap:14px;width:max-content;animation:corre var(--dur,60s) linear infinite}
-@keyframes corre{to{transform:translateX(-50%)}}
+.depos-trilho{display:flex;width:max-content;will-change:transform}
+.depos-trilho .depo{margin-right:14px}
 .depo{flex:0 0 250px;background:#fff;border:1px solid var(--perg-2);border-radius:14px;padding:14px 16px}
 .depo-top{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .depo-av{flex:0 0 34px;height:34px;border-radius:50%;background:var(--folha);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.95rem}
@@ -731,7 +731,7 @@ if (CONFIG.depoimentos.length) {
     el.innerHTML = '<div class="depo-top"><span class="depo-av"></span><div><b></b><small></small><i>★★★★★</i></div></div><p></p>';
     const av = el.querySelector('.depo-av');
     if (d.foto) {
-      const img = new Image(); img.src = d.foto; img.alt = ''; img.loading = 'lazy';
+      const img = new Image(); img.src = d.foto; img.alt = '';
       img.onerror = () => { av.textContent = d.nome.trim()[0]; };  // foto não encontrada: volta para a inicial
       av.appendChild(img);
     } else av.textContent = d.nome.trim()[0];
@@ -743,10 +743,31 @@ if (CONFIG.depoimentos.length) {
     el.querySelector('p').textContent = d.texto;
     return el;
   };
-  const trilho = $('#deposTrilho');
-  [...CONFIG.depoimentos, ...CONFIG.depoimentos].forEach(d => trilho.appendChild(card(d)));
-  trilho.style.setProperty('--dur', CONFIG.depoimentos.length * 9 + 's');
+  // VELOCIDADE do carrossel em pixels por segundo (menor = mais devagar)
+  const VELOCIDADE = 12;
+
+  const trilho = $('#deposTrilho'), janela = trilho.parentElement;
   $('#depoimentos').hidden = false;
+  // Monta a faixa repetindo os depoimentos até cobrir a tela com folga.
+  // A animação anda exatamente a largura de UMA volta e recomeça no mesmo ponto: emenda sem espaço vazio.
+  let anim;
+  const montar = () => {
+    if (anim) anim.cancel();
+    trilho.textContent = '';
+    CONFIG.depoimentos.forEach(d => trilho.appendChild(card(d)));
+    const volta = trilho.scrollWidth;                     // largura de uma volta completa
+    if (!volta) return;
+    const copias = Math.ceil(janela.clientWidth / volta) + 1;
+    for (let i = 0; i < copias; i++) CONFIG.depoimentos.forEach(d => trilho.appendChild(card(d)));
+    if (calmo || !trilho.animate) return;                // "reduzir movimento" ligado no celular: fica parado
+    anim = trilho.animate(
+      [{ transform: 'translate3d(0,0,0)' }, { transform: `translate3d(${-volta}px,0,0)` }],
+      { duration: volta / VELOCIDADE * 1000, iterations: Infinity, easing: 'linear' }
+    );
+  };
+  montar();
+  let larg = innerWidth;
+  addEventListener('resize', () => { if (innerWidth !== larg) { larg = innerWidth; montar(); } });
 }
 
 // Contato de suporte no rodapé (só aparece se houver e-mail configurado)
