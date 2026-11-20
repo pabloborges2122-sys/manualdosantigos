@@ -147,6 +147,20 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .fatos div+div{border-left:1px solid var(--perg-2)}
 .fatos b{display:block;font-family:var(--serif);font-size:2rem;color:var(--folha);line-height:1}
 .fatos span{font-size:.92rem;color:var(--tinta-2)}
+.etiqueta{display:inline-block;background:var(--mata);color:var(--mel);font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:5px 14px;margin-bottom:14px}
+.quando{max-width:420px;margin:0 auto 30px;background:var(--papel);border:1px solid var(--perg-2);border-radius:22px;padding:18px 14px 14px;box-shadow:0 22px 40px -24px rgba(23,58,34,.55);text-align:left}
+.quando-tit{font-family:var(--serif);font-weight:700;font-size:1.25rem;color:var(--folha);margin:0 4px 12px}
+.quando-grade{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quando-grade span{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--perg-2);border-radius:14px;padding:10px;font-size:.84rem;font-weight:700;line-height:1.25;color:var(--tinta)}
+.quando-grade i{font-style:normal;font-size:1.4rem;flex:none}
+.quando-mais{text-align:center;font-size:.85rem;color:var(--tinta-2);margin-top:12px}
+.tres{list-style:none;display:grid;gap:14px;max-width:420px;margin:0 auto 32px;text-align:left}
+.tres li{display:flex;gap:14px;align-items:flex-start}
+.tres li>b{flex:0 0 36px;height:36px;border-radius:50%;background:var(--mel);color:var(--mel-t);display:grid;place-items:center;font-family:var(--serif);font-size:1.1rem}
+.tres strong{display:block;color:var(--mata);font-family:var(--serif);font-size:1.08rem;line-height:1.3}
+.tres span{font-size:.98rem;color:var(--tinta-2);line-height:1.45}
+.bonus img.tela-mini{border-radius:14px;border:4px solid #1a1a17;aspect-ratio:390/560;object-fit:cover;object-position:top}
+.leque img{aspect-ratio:9/16;object-fit:cover;object-position:top}
 
 /* LEMBRANÇAS */
 .lembra{list-style:none;max-width:30em;margin:0 auto 36px}
@@ -365,21 +379,39 @@ footer a{color:#d4c79f}
     </div>
 
     <div class="acao">
-      <a class="btn" href="#checkout" data-checkout>Quero o Manual dos Antigos<small>pagamento único, com 3 livros de presente</small></a>
+      <a class="btn" href="#checkout" data-checkout>Quero o Manual dos Antigos<small>pagamento único, com 3 presentes dentro</small></a>
       <div class="seguro"><span><svg class="ic"><use href="#i-cadeado"/></svg>Compra segura</span><span><svg class="ic"><use href="#i-raio"/></svg>Acesso na hora</span><span><svg class="ic"><use href="#i-escudo"/></svg>7 dias de garantia</span></div>
     </div>
   </div>
 </header>
 
-<!-- 2. PROMESSA -->
+<!-- 2. DESTAQUE PRINCIPAL: o atalho "Quando bate... olhe aqui" -->
 <section class="promessa grao">
   <div class="wrap rv">
-    <h1>Com a planta, a medida certa e hora de tomar. </h1>
-    <p class="sub">57 receitas caseira de Chás, xaropes e compressas, que passaram de geração em geração, reunidos num manual que cabe na palma da sua mão.</p>
+    <span class="etiqueta">O que este manual tem de diferente</span>
+    <h1>Sentiu alguma coisa? Toque nela e a receita certa aparece.</h1>
+    <p class="sub">Não é livro para ler do começo ao fim. Você toca no que está sentindo e o manual mostra a receita, a medida, a hora de tomar e o cuidado para quem toma remédio.</p>
+    <div class="quando" aria-label="Exemplo da tela Quando bate, olhe aqui">
+      <div class="quando-tit">Quando bate... olhe aqui</div>
+      <div class="quando-grade">
+        <span><i>🦴</i>Dor na junta, joelho ou coluna</span>
+        <span><i>🌙</i>Não consigo pegar no sono</span>
+        <span><i>🍽️</i>Comi demais, a barriga está pesada</span>
+        <span><i>🔥</i>Azia, queimação no estômago</span>
+        <span><i>🤧</i>Gripe, tosse, garganta arranhando</span>
+        <span><i>🚽</i>Intestino preso ou solto</span>
+      </div>
+      <div class="quando-mais">+ 8 atalhos como estes, direto no seu celular</div>
+    </div>
+    <ol class="tres">
+      <li><b>1</b><span><strong>Toque no que está sentindo</strong>O joelho, o sono, a barriga.</span></li>
+      <li><b>2</b><span><strong>Veja a receita pronta</strong>Ingredientes, medida e passo a passo.</span></li>
+      <li><b>3</b><span><strong>Confira o aviso para você</strong>Se toma remédio, o manual avisa o que pede cuidado.</span></li>
+    </ol>
     <div class="fatos">
       <div><b data-conta="57">57</b><span>receitas</span></div>
-      <div><b data-conta="11">11</b><span>partes</span></div>
-      <div><b data-conta="4">4</b><span>livros no total</span></div>
+      <div><b data-conta="14">14</b><span>atalhos</span></div>
+      <div><b data-conta="3">3</b><span>presentes</span></div>
     </div>
   </div>
 </section>
@@ -498,20 +530,20 @@ footer a{color:#d4c79f}
 
     <div class="rv" style="margin-top:56px">
       <div class="orn"><svg class="ic"><use href="#i-presente"/></svg></div>
-      <h2>E você ainda leva 3 livros de presente</h2>
-      <p class="intro" style="margin-bottom:12px">Eles vêm junto com o manual, sem pagar nada a mais.</p>
+      <h2>E dentro do manual você ainda ganha 3 presentes</h2>
+      <p class="intro" style="margin-bottom:12px">Não são livros soltos para baixar: estão dentro do próprio manual, no mesmo acesso, prontos para usar.</p>
     </div>
     <article class="bonus rv">
-      <img src="assets/02-bonus-bem-estar.jpg" alt="Capa do bônus Bem-Estar Natural em Casa" loading="lazy" width="720" height="1279">
-      <div><span class="selo"><svg class="ic"><use href="#i-presente"/></svg>Presente 1</span><h3>Bem-Estar Natural em Casa</h3><p>Receitas simples com o que você já tem na cozinha para cuidar de toda a família.</p><p class="valor"><b>Incluído no seu pedido</b></p></div>
+      <img class="tela-mini" src="assets/presente-1-remedio.jpg" alt="Tela do presente Meu remédio e as receitas" loading="lazy" width="390" height="800">
+      <div><span class="selo"><svg class="ic"><use href="#i-presente"/></svg>Presente 1</span><h3>Meu remédio e as receitas</h3><p>Toma remédio de pressão, de diabetes, para afinar o sangue ou para dormir? Veja quais receitas pedem conversa com o médico, o que fazer em cada caso, e imprima uma folha pronta para levar à consulta.</p><p class="valor"><b>Incluído no seu pedido</b></p></div>
     </article>
     <article class="bonus rv">
-      <img src="assets/03-bonus-quintal.jpg" alt="Capa do bônus Cultive no Seu Quintal" loading="lazy" width="720" height="1279">
-      <div><span class="selo"><svg class="ic"><use href="#i-presente"/></svg>Presente 2</span><h3>Cultive no Seu Quintal</h3><p>Guia prático para plantar ervas, temperos e alimentos frescos em casa, mesmo em vaso.</p><p class="valor"><b>Incluído no seu pedido</b></p></div>
+      <img class="tela-mini" src="assets/presente-2-feira.jpg" alt="Tela do presente A lista da feira dos antigos" loading="lazy" width="390" height="800">
+      <div><span class="selo"><svg class="ic"><use href="#i-presente"/></svg>Presente 2</span><h3>A lista da feira dos antigos</h3><p>Tudo o que as receitas pedem, separado entre feira, casa de ervas e despensa. Vá marcando no celular enquanto compra. E ainda: como guardar cada coisa e 5 ervas fáceis de plantar no vaso.</p><p class="valor"><b>Incluído no seu pedido</b></p></div>
     </article>
     <article class="bonus rv">
-      <img src="assets/04-bonus-noites-de-paz.jpg" alt="Capa do bônus Noites de Paz" loading="lazy" width="720" height="1279">
-      <div><span class="selo"><svg class="ic"><use href="#i-presente"/></svg>Presente 3</span><h3>Noites de Paz</h3><p>Infusões e cuidados tradicionais para relaxar no fim do dia e deitar com tranquilidade.</p><p class="valor"><b>Incluído no seu pedido</b></p></div>
+      <img class="tela-mini" src="assets/presente-3-geladeira.jpg" alt="Tela do presente O cartão da geladeira" loading="lazy" width="390" height="800">
+      <div><span class="selo"><svg class="ic"><use href="#i-presente"/></svg>Presente 3</span><h3>O cartão da geladeira</h3><p>As 12 receitas mais usadas resumidas numa folha só: quando tomar, como fazer, quanto e o cuidado principal. É só imprimir e prender na geladeira.</p><p class="valor"><b>Incluído no seu pedido</b></p></div>
     </article>
   </div>
 </section>
@@ -521,22 +553,23 @@ footer a{color:#d4c79f}
   <div class="wrap">
     <div class="rotulo rv">
       <div class="leque" aria-hidden="true">
-        <img src="assets/02-bonus-bem-estar.jpg" alt="" loading="lazy">
+        <img src="assets/presente-1-remedio.jpg" alt="" loading="lazy">
         <img src="assets/01-capa-manual.jpg" alt="" loading="lazy">
-        <img src="assets/03-bonus-quintal.jpg" alt="" loading="lazy">
-        <img src="assets/04-bonus-noites-de-paz.jpg" alt="" loading="lazy">
+        <img src="assets/presente-2-feira.jpg" alt="" loading="lazy">
+        <img src="assets/presente-3-geladeira.jpg" alt="" loading="lazy">
       </div>
-      <h2>Leve a coleção completa</h2>
+      <h2>Leve o manual completo</h2>
       <p class="linha">O manual e os 3 presentes, num pagamento só</p>
       <ul class="leva">
         <li><svg class="ic"><use href="#i-check"/></svg><span><b>O Manual dos Antigos</b>, com as 57 receitas</span></li>
-        <li><svg class="ic"><use href="#i-check"/></svg><span>Bem-Estar Natural em Casa</span></li>
-        <li><svg class="ic"><use href="#i-check"/></svg><span>Cultive no Seu Quintal</span></li>
-        <li><svg class="ic"><use href="#i-check"/></svg><span>Noites de Paz</span></li>
+        <li><svg class="ic"><use href="#i-check"/></svg><span>Os 14 atalhos "Quando bate... olhe aqui"</span></li>
+        <li><svg class="ic"><use href="#i-check"/></svg><span>Presente 1: Meu remédio e as receitas</span></li>
+        <li><svg class="ic"><use href="#i-check"/></svg><span>Presente 2: A lista da feira dos antigos</span></li>
+        <li><svg class="ic"><use href="#i-check"/></svg><span>Presente 3: O cartão da geladeira</span></li>
         <li><svg class="ic"><use href="#i-check"/></svg><span>Busca, letra grande e perfil de cuidado</span></li>
         <li><svg class="ic"><use href="#i-check"/></svg><span>Acesso para sempre e versão para imprimir</span></li>
       </ul>
-      <p class="de">Os 4 livros de <s>R$ <span data-preco="antigo">97,00</span></s> por</p>
+      <p class="de">Tudo isso de <s>R$ <span data-preco="antigo">97,00</span></s> por</p>
       <p class="preco"><sup>R$</sup><span data-preco="completo">29,90</span></p>
       <p class="unico">pagamento único, sem mensalidade<br><b>dá menos de R$ 0,53 por receita</b></p>
       <div class="garantia-mini"><svg class="ic"><use href="#i-escudo"/></svg><span><b>Garantia de 7 dias.</b> Se não gostar, devolvemos todo o valor.</span></div>
@@ -601,6 +634,7 @@ footer a{color:#d4c79f}
       <details><summary>Como faço o pagamento?<svg class="ic"><use href="#i-seta"/></svg></summary><div class="resp"><p>Toque em "Quero receber meu manual". Você vai para a página de pagamento, preenche seu nome e e-mail e escolhe a forma de pagar que preferir. É um pagamento único de R$ <span data-preco="completo">29,90</span>, sem mensalidade.</p></div></details>
       <details><summary>Não sou bom com celular. Vou conseguir usar?<svg class="ic"><use href="#i-seta"/></svg></summary><div class="resp"><p>Vai sim. O manual foi feito pensando nisso: botões grandes, letra que aumenta com um toque e uma busca simples. Se preferir papel, é só imprimir.</p></div></details>
       <details><summary>Os ingredientes são difíceis de achar?<svg class="ic"><use href="#i-seta"/></svg></summary><div class="resp"><p>Não. São coisas de feira, quintal e despensa: mel, limão, gengibre, alho, canela, camomila, hortelã, boldo e outras ervas conhecidas.</p></div></details>
+      <details><summary>Os 3 presentes vêm separados?<svg class="ic"><use href="#i-seta"/></svg></summary><div class="resp"><p>Não. Eles já estão dentro do próprio manual, no mesmo acesso que chega no seu e-mail. É só abrir e tocar em "Seus 3 presentes". O cartão da geladeira e a folha para o médico têm um botão para imprimir.</p></div></details>
       <details><summary>O acesso é para sempre?<svg class="ic"><use href="#i-seta"/></svg></summary><div class="resp"><p>Sim. Pagamento único e acesso para sempre, sem mensalidade.</p></div></details>
       <details><summary>E se eu não gostar? Como peço o dinheiro de volta?<svg class="ic"><use href="#i-seta"/></svg></summary><div class="resp"><p>Você tem 7 dias de garantia, contados da compra. Basta pedir o reembolso pelo e-mail da compra ou pela plataforma de pagamento, sem precisar explicar o motivo, e devolvemos o valor integral.</p></div></details>
     </div>
@@ -612,7 +646,7 @@ footer a{color:#d4c79f}
   <div class="wrap rv">
     <div class="orn"><svg class="ic"><use href="#i-broto"/></svg></div>
     <h2>O caderno da vó não precisa ficar na gaveta</h2>
-    <p class="intro">Tenha as 57 receitas organizadas na palma da mão, com os 3 livros de presente, por menos que um lanche.</p>
+    <p class="intro">Tenha as 57 receitas organizadas na palma da mão, com os 3 presentes, por menos que um lanche.</p>
     <div class="acao">
       <a class="btn" href="#checkout" data-checkout>Quero o Manual dos Antigos<small>R$ <span data-preco="completo">29,90</span> com os 3 presentes</small></a>
       <div class="seguro"><span><svg class="ic"><use href="#i-cadeado"/></svg>Compra segura</span><span><svg class="ic"><use href="#i-raio"/></svg>Acesso na hora</span><span><svg class="ic"><use href="#i-escudo"/></svg>7 dias de garantia</span></div>
