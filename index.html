@@ -53,7 +53,7 @@ src="https://www.facebook.com/tr?id=1107377432067940&ev=PageView&noscript=1"
   --ease:cubic-bezier(.22,.8,.24,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;scroll-padding-top:58px;-webkit-text-size-adjust:100%}
 body{font-family:var(--sans);font-size:18px;line-height:1.6;color:var(--tinta);background:var(--perg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
@@ -91,50 +91,40 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .escuro .seguro,.hero .seguro{color:#cfc29a}
 .escuro .seguro .ic,.hero .seguro .ic{color:var(--mel)}
 
-/* HERO: a VSL é a primeira coisa */
-.hero{position:relative;padding:16px 0 18px;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;background:radial-gradient(120% 70% at 50% 30%,#245032 0%,var(--mata) 55%,var(--mata-2) 100%);color:#efe4c6;text-align:center;overflow:hidden}
-.hero .ramo{position:absolute;width:190px;color:rgba(226,199,132,.13);pointer-events:none}
-.hero .ramo.e{left:-46px;top:40px;transform:rotate(-18deg)}
-.hero .ramo.d{right:-46px;top:220px;transform:scaleX(-1) rotate(-18deg)}
-.hero-tit{font-family:var(--serif);font-weight:700;font-size:clamp(1.3rem,5.4vw,1.85rem);line-height:1.15;color:#fbf2da;max-width:16em;margin:0 auto 6px;text-wrap:balance}
-.hero-sub{font-size:.95rem;line-height:1.35;color:#e3d6ae;max-width:24em;margin:0 auto 6px;text-wrap:balance}
-.dica-som{display:inline-flex;align-items:center;gap:7px;font-size:.85rem;color:#d4c79f;margin-bottom:4px}
-.dica-som .ic{color:var(--mel)}
-.vsl-moldura{position:relative;width:min(100%,340px,calc((100vh - 290px) * 9 / 16));width:min(100%,340px,calc((100svh - 290px) * 9 / 16));min-width:170px;margin:14px auto 22px}
-.vsl-moldura::before,.vsl-moldura::after{content:"";position:absolute;pointer-events:none}
-.vsl-moldura::before{inset:-12px;border:1px solid rgba(226,199,132,.55);border-radius:28px}
-.vsl-moldura::after{inset:-5px;border:2px solid var(--ouro);border-radius:22px}
-.vsl{position:relative;aspect-ratio:9/16;overflow:hidden;background:#0b1a10;border-radius:18px;box-shadow:0 30px 60px -20px rgba(0,0,0,.7)}
+/* TOPO no estilo "post": barra com a foto, frase curta e o vídeo grande, tudo numa tela */
+.perfil{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;height:58px;padding:0 14px;background:#fbf8f1;border-bottom:1px solid #ece4d3}
+.perfil img{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:none}
+.perfil b{display:block;font-family:var(--serif);font-size:1.05rem;font-weight:700;color:#4a4033;line-height:1.15}
+.perfil small{display:block;font-size:.74rem;color:#8a7f6c;line-height:1.2}
+.hero{position:relative;padding:12px 0 16px;min-height:calc(100vh - 58px);min-height:calc(100svh - 58px);display:flex;flex-direction:column;justify-content:flex-start;background:#fbf8f1;color:var(--tinta);text-align:center}
+.hero .wrap{padding:0 12px}
+.hero-tit{font-family:var(--sans);font-weight:800;font-size:1.05rem;line-height:1.35;color:#2b2418;max-width:22em;margin:0 auto 2px;text-wrap:balance}
+.hero-sub{font-size:.95rem;font-weight:600;line-height:1.35;color:#5c4f3a;max-width:24em;margin:0 auto 12px;text-wrap:balance}
+.vsl-moldura{position:relative;width:min(100%,440px,calc((100vh - 268px) * 9 / 16));width:min(100%,440px,calc((100svh - 268px) * 9 / 16));min-width:180px;margin:0 auto 16px}
+.vsl{position:relative;aspect-ratio:9/16;overflow:hidden;background:#111;border-radius:4px}
 /* Barra de minutagem: anda rápido no começo e desacelera (não é a posição real do vídeo) */
-.vsl .tempo{position:absolute;left:0;right:0;bottom:0;z-index:4;height:7px;background:rgba(255,255,255,.18);pointer-events:none}
-.vsl .tempo i{display:block;height:100%;width:0;background:var(--mel);box-shadow:0 0 10px rgba(233,169,59,.8);transition:width .5s linear}
+.vsl .tempo{position:absolute;left:0;right:0;bottom:0;z-index:4;height:10px;background:rgba(0,0,0,.35);pointer-events:none}
+.vsl .tempo i{display:block;height:100%;width:0;background:#c4161c;transition:width .5s linear}
 .vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.vsl .play{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:12px;padding-bottom:30px;border:0;cursor:pointer;color:#fff;font:inherit;background:linear-gradient(to top,rgba(10,25,14,.85),rgba(10,25,14,0) 50%),url(assets/01-capa-manual.jpg) center top/cover}
-.vsl .play .bola{width:78px;height:78px;border-radius:50%;background:var(--mel);color:var(--mel-t);display:grid;place-items:center;box-shadow:0 0 0 0 rgba(233,169,59,.6);animation:onda 2s infinite}
-.vsl .play .bola svg{width:30px;height:30px;fill:currentColor;stroke:none;margin-left:4px}
-.vsl .play .bola .som{display:none;width:30px;height:30px;margin:0}
-.vsl .play b{font-size:1rem;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.vsl .play{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;color:#fff;font:inherit;background:linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12)),url(assets/vsl-capa.jpg) center/cover}
+.vsl .play .bola{width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.95);color:#2b2418;display:grid;place-items:center;box-shadow:0 4px 18px rgba(0,0,0,.3)}
+.vsl .play .bola svg{width:26px;height:26px;fill:currentColor;stroke:none;margin-left:4px}
+.vsl .play .bola .som{display:none;width:28px;height:28px;margin:0}
+.vsl .play b{font-size:.95rem;font-weight:700;background:rgba(0,0,0,.55);border-radius:999px;padding:5px 14px}
 .vsl .play.oculto{display:none}
-.vsl .play.mudo{background:linear-gradient(to top,rgba(10,25,14,.7),rgba(10,25,14,0) 38%)}
-.vsl .play.mudo .bola{width:62px;height:62px}
+.vsl .play.mudo{background:transparent}
 .vsl .play.mudo .bola .tri{display:none}
 .vsl .play.mudo .bola .som{display:block;fill:none;stroke:currentColor;stroke-width:2.2}
-@keyframes onda{0%{box-shadow:0 0 0 0 rgba(233,169,59,.55)}70%{box-shadow:0 0 0 22px rgba(233,169,59,0)}100%{box-shadow:0 0 0 0 rgba(233,169,59,0)}}
 .vsl .trava{position:absolute;inset:0;z-index:2;display:none;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer}
 .vsl .trava.on{display:flex}
-.vsl .trava .bola{display:none;width:70px;height:70px;border-radius:50%;background:rgba(233,169,59,.95);color:var(--mel-t);place-items:center}
-.vsl .trava .bola svg{width:28px;height:28px;fill:currentColor;stroke:none;margin-left:4px}
-.vsl .trava.pausado{background:rgba(0,0,0,.35)}
+.vsl .trava .bola{display:none;width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.95);color:#2b2418;place-items:center}
+.vsl .trava .bola svg{width:26px;height:26px;fill:currentColor;stroke:none;margin-left:4px}
+.vsl .trava.pausado{background:rgba(0,0,0,.3)}
 .vsl .trava.pausado .bola{display:grid}
-.hero .acao{max-width:420px;margin:0 auto}
+.hero .acao{max-width:440px;margin:0 auto}
 .hero .acao .btn{min-height:54px;padding:12px 18px}
 
-/* Sequência de entrada do hero (o único momento orquestrado da página) */
-.js .hero .hero-tit,.js .hero .dica-som,.js .vsl-moldura,.js .hero .acao{opacity:0;transform:translateY(14px);animation:entra .8s var(--ease) forwards}
-.js .hero .dica-som{animation-delay:.12s}
-.js .vsl-moldura{transform:scale(.96);animation-delay:.2s}
-.js .hero .acao{animation-delay:.55s}
-@keyframes entra{to{opacity:1;transform:none}}
+
 
 /* PROMESSA */
 .promessa{text-align:center;padding-top:56px}
@@ -301,20 +291,15 @@ footer a{color:#d4c79f}
 .trancado{display:none!important}
 .liberando{animation:surge 1s var(--ease)}
 @keyframes surge{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.aviso-vsl{text-align:center;background:var(--mata);color:#efe4c6;padding:34px 22px 40px}
-.aviso-vsl .cad{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;background:rgba(233,169,59,.15);color:var(--mel)}
-.aviso-vsl .cad .ic{width:26px;height:26px}
-.aviso-vsl h3{font-family:var(--serif);color:#fbf2da;font-size:1.3rem;margin-bottom:8px}
-.aviso-vsl p{color:#d4c79f;font-size:.98rem;max-width:26em;margin:0 auto 18px}
-.aviso-vsl a{display:inline-flex;align-items:center;gap:8px;color:var(--mel);font-weight:700;text-decoration:none;border:1.5px solid var(--mel);border-radius:12px;padding:12px 20px}
-.aviso-vsl a .ic{width:18px;height:18px}
+.aviso-vsl{display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;background:#fbf8f1;color:#8a7f6c;padding:16px 20px 24px;font-size:.86rem;border-top:1px solid #ece4d3}
+.aviso-vsl .ic{width:16px;height:16px;flex:none}
 
 .js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .js .rv.vis{opacity:1;transform:none}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  .js .rv,.js .hero .hero-tit,.js .hero .dica-som,.js .vsl-moldura,.js .hero .acao{opacity:1;transform:none}
+  .js .rv{opacity:1;transform:none}
 }
 @media (min-width:700px){
   section{padding:84px 0}
@@ -359,16 +344,17 @@ footer a{color:#d4c79f}
   <symbol id="i-celular" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
 </svg>
 
-<!-- BARRA DO TOPO -->
+<!-- BARRA DO TOPO: foto e nome, como um perfil -->
+<div class="perfil">
+  <img src="assets/avatar-antonio.jpg" alt="" width="38" height="38">
+  <div><b>O Manual dos Antigos</b><small>com o Seu Antônio</small></div>
+</div>
 
-<!-- 1. HERO: VSL em primeiro lugar -->
-<header class="hero grao" id="topo">
-  <svg class="ramo e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".8" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
-  <svg class="ramo d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".8" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+<!-- 1. HERO: frase curta e a VSL grande -->
+<header class="hero" id="topo">
   <div class="wrap">
     <h2 class="hero-tit">O que os ANTIGOS faziam quando a dor batia, e quase ninguém anotou.</h2>
     <p class="hero-sub">O caderno de receitas que a VÓ sabia de cabeça.</p>
-    <div class="dica-som"><svg class="ic"><use href="#i-som"/></svg>Assista com o som ligado</div>
 
     <!-- VSL no Vimeo. A camada "trava" cobre o player depois que o vídeo começa, para ninguém
          mexer na barra de progresso; o script também desfaz qualquer avanço ou retrocesso. -->
@@ -393,12 +379,7 @@ footer a{color:#d4c79f}
 </header>
 
 <!-- Aparece só enquanto o resto da página está trancado -->
-<div class="aviso-vsl" id="avisoVsl">
-  <div class="cad"><svg class="ic"><use href="#i-cadeado"/></svg></div>
-  <h3>O resto você descobre no vídeo</h3>
-  <p>As receitas por dentro, os 3 presentes e a condição especial de hoje aparecem aqui embaixo enquanto você assiste.</p>
-  <a href="#topo"><svg class="ic"><use href="#i-som"/></svg>Voltar para o vídeo</a>
-</div>
+<div class="aviso-vsl" id="avisoVsl"><svg class="ic"><use href="#i-cadeado"/></svg>O resto da página aparece enquanto você assiste ao vídeo.</div>
 
 <!-- ===== Daqui até a chamada final só aparece quando a VSL chega em LIBERA_EM_SEG (ver liberar() no script) ===== -->
 <div id="resto" class="trancado">
