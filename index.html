@@ -297,6 +297,18 @@ footer a{color:#d4c79f}
 
 
 /* Entrada suave das seções */
+/* Liberação: o resto da página (e o botão do topo) só aparece quando o vídeo chega na parte do manual */
+.trancado{display:none!important}
+.liberando{animation:surge 1s var(--ease)}
+@keyframes surge{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.aviso-vsl{text-align:center;background:var(--mata);color:#efe4c6;padding:34px 22px 40px}
+.aviso-vsl .cad{width:54px;height:54px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;background:rgba(233,169,59,.15);color:var(--mel)}
+.aviso-vsl .cad .ic{width:26px;height:26px}
+.aviso-vsl h3{font-family:var(--serif);color:#fbf2da;font-size:1.3rem;margin-bottom:8px}
+.aviso-vsl p{color:#d4c79f;font-size:.98rem;max-width:26em;margin:0 auto 18px}
+.aviso-vsl a{display:inline-flex;align-items:center;gap:8px;color:var(--mel);font-weight:700;text-decoration:none;border:1.5px solid var(--mel);border-radius:12px;padding:12px 20px}
+.aviso-vsl a .ic{width:18px;height:18px}
+
 .js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .js .rv.vis{opacity:1;transform:none}
 
@@ -374,11 +386,22 @@ footer a{color:#d4c79f}
       </div>
     </div>
 
-    <div class="acao">
+    <div class="acao trancado" id="heroAcao">
       <a class="btn" href="#checkout" data-checkout>Quero o Manual dos Antigos<small>pagamento único, com 3 presentes dentro</small></a>
     </div>
   </div>
 </header>
+
+<!-- Aparece só enquanto o resto da página está trancado -->
+<div class="aviso-vsl" id="avisoVsl">
+  <div class="cad"><svg class="ic"><use href="#i-cadeado"/></svg></div>
+  <h3>O resto você descobre no vídeo</h3>
+  <p>As receitas por dentro, os 3 presentes e a condição especial de hoje aparecem aqui embaixo enquanto você assiste.</p>
+  <a href="#topo"><svg class="ic"><use href="#i-som"/></svg>Voltar para o vídeo</a>
+</div>
+
+<!-- ===== Daqui até a chamada final só aparece quando a VSL chega em LIBERA_EM_SEG (ver liberar() no script) ===== -->
+<div id="resto" class="trancado">
 
 <!-- 2. DESTAQUE PRINCIPAL: o atalho "Quando bate... olhe aqui" -->
 <section class="promessa grao">
@@ -649,6 +672,8 @@ footer a{color:#d4c79f}
   </div>
 </section>
 
+</div><!-- /#resto -->
+
 <footer>
   <div class="wrap">
     <p>© 2026 O Manual dos Antigos. Todos os direitos reservados.</p>
@@ -792,6 +817,7 @@ if (CONFIG.depoimentos.length) {
     );
   };
   montar();
+  window.remontarDepos = montar;  // chamado de novo quando a página é liberada (escondida, a faixa tem largura zero)
   let larg = innerWidth;
   addEventListener('resize', () => { if (innerWidth !== larg) { larg = innerWidth; montar(); } });
 }
@@ -801,6 +827,26 @@ if (CONFIG.suporte) {
   const sup = $('#suporte'), a = sup.querySelector('a');
   a.href = 'mailto:' + CONFIG.suporte; a.textContent = CONFIG.suporte; sup.hidden = false;
 }
+
+// Liberação: o resto da página e o botão do topo só aparecem quando a VSL chega na parte
+// em que o Seu Antônio apresenta o manual ("MAIS DE 60 RECEITAS", aos 60 s do vídeo).
+// Quem já liberou uma vez (ou chega com ?liberado no link) vê tudo direto.
+const LIBERA_EM_SEG = 61, LIBERA_MAX_MS = 180000;
+let liberado = false;
+function liberar() {
+  if (liberado) return;
+  liberado = true;
+  try { localStorage.setItem('mda_lib', '1'); } catch (e) {}
+  ['#resto', '#heroAcao'].forEach(sel => { const el = $(sel); el.classList.remove('trancado'); el.classList.add('liberando'); });
+  const aviso = $('#avisoVsl'); if (aviso) aviso.remove();
+  if (window.remontarDepos) window.remontarDepos();
+  const tr = $('#trilho'); if (tr) tr.dispatchEvent(new Event('scroll'));
+}
+let jaLiberou = false;
+try { jaLiberou = localStorage.getItem('mda_lib') === '1'; } catch (e) {}
+if (jaLiberou || /liberado/.test(location.search)) setTimeout(liberar, 0); // depois do script inteiro carregar
+// Rede de segurança: se o vídeo não tocar por algum motivo, libera depois de 3 minutos na página
+setTimeout(liberar, LIBERA_MAX_MS);
 
 // VSL sem avançar nem retroceder
 const play = $('#playVsl'), trava = $('#travaVsl'), barra = $('#tempoBarra');
@@ -820,6 +866,7 @@ if (window.Vimeo) {
 
   player.on('timeupdate', d => {
     ultimo = d.seconds;
+    if (d.seconds >= LIBERA_EM_SEG) liberar();
     const p = d.duration ? d.seconds / d.duration : 0;
     // Minutagem "fake": corre no começo e vai desacelerando até o fim
     barra.style.width = (100 * (1 - Math.pow(1 - p, 2.4))).toFixed(2) + '%';
@@ -890,6 +937,8 @@ if (window.Vimeo) {
   });
 } else {
   play.addEventListener('click', () => play.classList.add('oculto'));
+  // Sem o player do Vimeo não há como medir o vídeo: libera a página inteira
+  setTimeout(liberar, 0);
 }
 
 // Carrossel "por dentro": pontos que acompanham o arraste
