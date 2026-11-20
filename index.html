@@ -54,7 +54,7 @@ src="https://www.facebook.com/tr?id=1107377432067940&ev=PageView&noscript=1"
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:var(--sans);font-size:18px;line-height:1.6;color:var(--tinta);background:var(--perg);-webkit-font-smoothing:antialiased;padding-top:40px;overflow-x:hidden}
+body{font-family:var(--sans);font-size:18px;line-height:1.6;color:var(--tinta);background:var(--perg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{display:block;max-width:100%;height:auto}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--mel);outline-offset:3px;border-radius:6px}
@@ -77,9 +77,6 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .orn svg{width:22px;height:22px}
 
 /* BARRA DO TOPO */
-.barra{position:fixed;inset:0 0 auto;z-index:60;height:40px;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--mata-2);color:#e8dcb9;font-size:.84rem;border-bottom:1px solid rgba(226,199,132,.25)}
-.barra .ic{color:var(--mel)}
-.barra b{font-variant-numeric:tabular-nums;color:var(--mel-t);background:var(--mel);border-radius:6px;padding:1px 8px;font-size:.92rem}
 
 /* BOTÃO */
 .btn{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:62px;text-align:center;text-decoration:none;background:var(--mel);color:var(--mel-t);font-weight:800;font-size:1.12rem;line-height:1.2;padding:16px 20px;border-radius:14px;border:0;cursor:pointer;box-shadow:0 5px 0 #b67812,0 14px 28px -8px rgba(233,169,59,.55);transition:transform .18s var(--ease),box-shadow .18s,background .18s}
@@ -95,15 +92,15 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .escuro .seguro .ic,.hero .seguro .ic{color:var(--mel)}
 
 /* HERO: a VSL é a primeira coisa */
-.hero{position:relative;padding:22px 0 46px;background:radial-gradient(120% 70% at 50% 30%,#245032 0%,var(--mata) 55%,var(--mata-2) 100%);color:#efe4c6;text-align:center;overflow:hidden}
+.hero{position:relative;padding:16px 0 18px;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;background:radial-gradient(120% 70% at 50% 30%,#245032 0%,var(--mata) 55%,var(--mata-2) 100%);color:#efe4c6;text-align:center;overflow:hidden}
 .hero .ramo{position:absolute;width:190px;color:rgba(226,199,132,.13);pointer-events:none}
 .hero .ramo.e{left:-46px;top:40px;transform:rotate(-18deg)}
 .hero .ramo.d{right:-46px;top:220px;transform:scaleX(-1) rotate(-18deg)}
-.hero-tit{font-family:var(--serif);font-weight:700;font-size:clamp(1.45rem,5.8vw,2rem);line-height:1.18;color:#fbf2da;max-width:15em;margin:2px auto 8px;text-wrap:balance}
-.hero-sub{font-size:1rem;line-height:1.45;color:#e3d6ae;max-width:24em;margin:0 auto 10px;text-wrap:balance}
-.dica-som{display:inline-flex;align-items:center;gap:7px;font-size:.95rem;color:#d4c79f;margin-bottom:18px}
+.hero-tit{font-family:var(--serif);font-weight:700;font-size:clamp(1.3rem,5.4vw,1.85rem);line-height:1.15;color:#fbf2da;max-width:16em;margin:0 auto 6px;text-wrap:balance}
+.hero-sub{font-size:.95rem;line-height:1.35;color:#e3d6ae;max-width:24em;margin:0 auto 6px;text-wrap:balance}
+.dica-som{display:inline-flex;align-items:center;gap:7px;font-size:.85rem;color:#d4c79f;margin-bottom:4px}
 .dica-som .ic{color:var(--mel)}
-.vsl-moldura{position:relative;width:min(100%,360px,calc((100svh - 320px) * 9 / 16));min-width:250px;margin:0 auto 26px}
+.vsl-moldura{position:relative;width:min(100%,340px,calc((100vh - 290px) * 9 / 16));width:min(100%,340px,calc((100svh - 290px) * 9 / 16));min-width:170px;margin:14px auto 22px}
 .vsl-moldura::before,.vsl-moldura::after{content:"";position:absolute;pointer-events:none}
 .vsl-moldura::before{inset:-12px;border:1px solid rgba(226,199,132,.55);border-radius:28px}
 .vsl-moldura::after{inset:-5px;border:2px solid var(--ouro);border-radius:22px}
@@ -130,6 +127,7 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .vsl .trava.pausado{background:rgba(0,0,0,.35)}
 .vsl .trava.pausado .bola{display:grid}
 .hero .acao{max-width:420px;margin:0 auto}
+.hero .acao .btn{min-height:54px;padding:12px 18px}
 
 /* Sequência de entrada do hero (o único momento orquestrado da página) */
 .js .hero .hero-tit,.js .hero .dica-som,.js .vsl-moldura,.js .hero .acao{opacity:0;transform:translateY(14px);animation:entra .8s var(--ease) forwards}
@@ -350,7 +348,6 @@ footer a{color:#d4c79f}
 </svg>
 
 <!-- BARRA DO TOPO -->
-<div class="barra" role="status"><svg class="ic"><use href="#i-raio"/></svg>Livro digital com acesso imediato no seu e-mail</div>
 
 <!-- 1. HERO: VSL em primeiro lugar -->
 <header class="hero grao" id="topo">
@@ -379,7 +376,6 @@ footer a{color:#d4c79f}
 
     <div class="acao">
       <a class="btn" href="#checkout" data-checkout>Quero o Manual dos Antigos<small>pagamento único, com 3 presentes dentro</small></a>
-      <div class="seguro"><span><svg class="ic"><use href="#i-cadeado"/></svg>Compra segura</span><span><svg class="ic"><use href="#i-raio"/></svg>Acesso na hora</span><span><svg class="ic"><use href="#i-escudo"/></svg>7 dias de garantia</span></div>
     </div>
   </div>
 </header>
