@@ -91,37 +91,44 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .escuro .seguro,.hero .seguro{color:#cfc29a}
 .escuro .seguro .ic,.hero .seguro .ic{color:var(--mel)}
 
-/* TOPO no estilo "post": barra com a foto, frase curta e o vídeo grande, tudo numa tela */
-.perfil{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;height:58px;padding:0 14px;background:#fbf8f1;border-bottom:1px solid #ece4d3}
-.perfil img{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:none}
-.perfil b{display:block;font-family:var(--serif);font-size:1.05rem;font-weight:700;color:#4a4033;line-height:1.15}
-.perfil small{display:block;font-size:.74rem;color:#8a7f6c;line-height:1.2}
-.hero{position:relative;padding:12px 0 16px;min-height:calc(100vh - 58px);min-height:calc(100svh - 58px);display:flex;flex-direction:column;justify-content:flex-start;background:#fbf8f1;color:var(--tinta);text-align:center}
-.hero .wrap{padding:0 12px}
-.hero-tit{font-family:var(--sans);font-weight:800;font-size:1.05rem;line-height:1.35;color:#2b2418;max-width:22em;margin:0 auto 2px;text-wrap:balance}
-.hero-sub{font-size:.95rem;font-weight:600;line-height:1.35;color:#5c4f3a;max-width:24em;margin:0 auto 12px;text-wrap:balance}
-.vsl-moldura{position:relative;width:min(100%,440px,calc((100vh - 268px) * 9 / 16));width:min(100%,440px,calc((100svh - 268px) * 9 / 16));min-width:180px;margin:0 auto 16px}
-.vsl{position:relative;aspect-ratio:9/16;overflow:hidden;background:#111;border-radius:4px}
+/* TOPO: a identidade da página (mata, ouro, mel) no formato da referência:
+   barra com a foto, frase curta e o vídeo ocupando quase a tela toda */
+.perfil{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;height:56px;padding:0 14px;background:var(--mata-2);border-bottom:1px solid rgba(226,199,132,.3)}
+.perfil img{width:38px;height:38px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2px var(--mata-2),0 0 0 3.5px var(--ouro)}
+.perfil b{display:block;font-family:var(--serif);font-size:1.08rem;font-weight:700;color:#fbf2da;line-height:1.15}
+.perfil small{display:block;font-size:.76rem;color:var(--ouro-cl);line-height:1.25}
+.hero{position:relative;padding:10px 0 12px;min-height:calc(100vh - 56px);min-height:calc(100svh - 56px);display:flex;flex-direction:column;justify-content:flex-start;background:radial-gradient(120% 70% at 50% 30%,#245032 0%,var(--mata) 55%,var(--mata-2) 100%);color:#efe4c6;text-align:center;overflow:hidden}
+.hero .ramo{position:absolute;width:190px;color:rgba(226,199,132,.12);pointer-events:none}
+.hero .ramo.e{left:-60px;top:20px;transform:rotate(-18deg)}
+.hero .ramo.d{right:-60px;top:260px;transform:scaleX(-1) rotate(-18deg)}
+.hero .wrap{position:relative;padding:0 10px}
+.hero-tit{font-family:var(--serif);font-weight:700;font-size:clamp(1.18rem,5vw,1.6rem);line-height:1.15;color:#fbf2da;max-width:20em;margin:0 auto 2px;text-wrap:balance}
+.hero-sub{font-size:.9rem;line-height:1.3;color:#e3d6ae;max-width:26em;margin:0 auto 10px;text-wrap:balance}
+/* O vídeo ocupa toda a largura que a altura da tela permite, deixando lugar para o botão embaixo */
+.vsl-moldura{position:relative;width:min(100%,460px,calc((100vh - 244px) * 9 / 16));width:min(100%,460px,calc((100svh - 244px) * 9 / 16));min-width:180px;margin:0 auto 12px;padding:3px;border-radius:16px;background:linear-gradient(160deg,var(--ouro-cl),var(--ouro) 45%,#8a6a2a);box-shadow:0 24px 50px -20px rgba(0,0,0,.75)}
+.vsl{position:relative;aspect-ratio:9/16;overflow:hidden;background:#0b1a10;border-radius:13px}
 /* Barra de minutagem: anda rápido no começo e desacelera (não é a posição real do vídeo) */
-.vsl .tempo{position:absolute;left:0;right:0;bottom:0;z-index:4;height:10px;background:rgba(0,0,0,.35);pointer-events:none}
-.vsl .tempo i{display:block;height:100%;width:0;background:#c4161c;transition:width .5s linear}
+.vsl .tempo{position:absolute;left:0;right:0;bottom:0;z-index:4;height:9px;background:rgba(0,0,0,.35);pointer-events:none}
+.vsl .tempo i{display:block;height:100%;width:0;background:var(--mel);box-shadow:0 0 10px rgba(233,169,59,.8);transition:width .5s linear}
 .vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.vsl .play{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;color:#fff;font:inherit;background:linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12)),url(assets/vsl-capa.jpg) center/cover}
-.vsl .play .bola{width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.95);color:#2b2418;display:grid;place-items:center;box-shadow:0 4px 18px rgba(0,0,0,.3)}
-.vsl .play .bola svg{width:26px;height:26px;fill:currentColor;stroke:none;margin-left:4px}
-.vsl .play .bola .som{display:none;width:28px;height:28px;margin:0}
-.vsl .play b{font-size:.95rem;font-weight:700;background:rgba(0,0,0,.55);border-radius:999px;padding:5px 14px}
+.vsl .play{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border:0;cursor:pointer;color:#fff;font:inherit;background:linear-gradient(to top,rgba(10,25,14,.55),rgba(10,25,14,.05) 55%),url(assets/vsl-capa.jpg) center/cover}
+.vsl .play .bola{width:76px;height:76px;border-radius:50%;background:var(--mel);color:var(--mel-t);display:grid;place-items:center;box-shadow:0 0 0 0 rgba(233,169,59,.6);animation:onda 2s infinite}
+.vsl .play .bola svg{width:30px;height:30px;fill:currentColor;stroke:none;margin-left:4px}
+.vsl .play .bola .som{display:none;width:30px;height:30px;margin:0}
+.vsl .play b{font-size:1rem;font-weight:700;background:rgba(15,41,24,.75);border:1px solid rgba(226,199,132,.45);border-radius:999px;padding:6px 16px}
 .vsl .play.oculto{display:none}
 .vsl .play.mudo{background:transparent}
+.vsl .play.mudo .bola{width:64px;height:64px}
 .vsl .play.mudo .bola .tri{display:none}
 .vsl .play.mudo .bola .som{display:block;fill:none;stroke:currentColor;stroke-width:2.2}
+@keyframes onda{0%{box-shadow:0 0 0 0 rgba(233,169,59,.55)}70%{box-shadow:0 0 0 22px rgba(233,169,59,0)}100%{box-shadow:0 0 0 0 rgba(233,169,59,0)}}
 .vsl .trava{position:absolute;inset:0;z-index:2;display:none;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer}
 .vsl .trava.on{display:flex}
-.vsl .trava .bola{display:none;width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.95);color:#2b2418;place-items:center}
-.vsl .trava .bola svg{width:26px;height:26px;fill:currentColor;stroke:none;margin-left:4px}
-.vsl .trava.pausado{background:rgba(0,0,0,.3)}
+.vsl .trava .bola{display:none;width:70px;height:70px;border-radius:50%;background:rgba(233,169,59,.95);color:var(--mel-t);place-items:center}
+.vsl .trava .bola svg{width:28px;height:28px;fill:currentColor;stroke:none;margin-left:4px}
+.vsl .trava.pausado{background:rgba(0,0,0,.35)}
 .vsl .trava.pausado .bola{display:grid}
-.hero .acao{max-width:440px;margin:0 auto}
+.hero .acao{max-width:460px;margin:0 auto}
 .hero .acao .btn{min-height:54px;padding:12px 18px}
 
 
@@ -291,8 +298,8 @@ footer a{color:#d4c79f}
 .trancado{display:none!important}
 .liberando{animation:surge 1s var(--ease)}
 @keyframes surge{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-.aviso-vsl{display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;background:#fbf8f1;color:#8a7f6c;padding:16px 20px 24px;font-size:.86rem;border-top:1px solid #ece4d3}
-.aviso-vsl .ic{width:16px;height:16px;flex:none}
+.aviso-vsl{display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;background:var(--mata-2);color:#d4c79f;padding:16px 20px 24px;font-size:.88rem;border-top:1px solid rgba(226,199,132,.2)}
+.aviso-vsl .ic{width:16px;height:16px;flex:none;color:var(--mel)}
 
 .js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
 .js .rv.vis{opacity:1;transform:none}
@@ -351,7 +358,9 @@ footer a{color:#d4c79f}
 </div>
 
 <!-- 1. HERO: frase curta e a VSL grande -->
-<header class="hero" id="topo">
+<header class="hero grao" id="topo">
+  <svg class="ramo e" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".8" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+  <svg class="ramo d" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".8" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
   <div class="wrap">
     <h2 class="hero-tit">O que os ANTIGOS faziam quando a dor batia, e quase ninguém anotou.</h2>
     <p class="hero-sub">O caderno de receitas que a VÓ sabia de cabeça.</p>
