@@ -15,9 +15,6 @@
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://player.vimeo.com">
-<link rel="preconnect" href="https://i.vimeocdn.com">
-<link rel="preconnect" href="https://f.vimeocdn.com">
 <link rel="preload" as="image" href="assets/01-capa-manual.jpg">
 <script>if('IntersectionObserver' in window&&!/semfx/.test(location.search))document.documentElement.className='js'</script>
 
@@ -110,7 +107,7 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 /* Barra de minutagem: anda rápido no começo e desacelera (não é a posição real do vídeo) */
 .vsl .tempo{position:absolute;left:0;right:0;bottom:0;z-index:4;height:9px;background:rgba(0,0,0,.35);pointer-events:none}
 .vsl .tempo i{display:block;height:100%;width:0;background:var(--mel);box-shadow:0 0 10px rgba(233,169,59,.8);transition:width .5s linear}
-.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vsl video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0b1a10}
 .vsl .play{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border:0;cursor:pointer;color:#fff;font:inherit;background:linear-gradient(to top,rgba(10,25,14,.55),rgba(10,25,14,.05) 55%),url(assets/vsl-capa.jpg) center/cover}
 .vsl .play .bola{width:76px;height:76px;border-radius:50%;background:var(--mel);color:var(--mel-t);display:grid;place-items:center;box-shadow:0 0 0 0 rgba(233,169,59,.6);animation:onda 2s infinite}
 .vsl .play .bola svg{width:30px;height:30px;fill:currentColor;stroke:none;margin-left:4px}
@@ -365,11 +362,11 @@ footer a{color:#d4c79f}
     <h2 class="hero-tit">O que os ANTIGOS faziam quando a dor batia, e quase ninguém anotou.</h2>
     <p class="hero-sub">O caderno de receitas que a VÓ sabia de cabeça.</p>
 
-    <!-- VSL no Vimeo. A camada "trava" cobre o player depois que o vídeo começa, para ninguém
+    <!-- VSL no próprio site (assets/vsl.mp4). A camada "trava" cobre o player depois que o vídeo começa, para ninguém
          mexer na barra de progresso; o script também desfaz qualquer avanço ou retrocesso. -->
     <div class="vsl-moldura">
       <div class="vsl">
-        <iframe id="vsl" src="https://player.vimeo.com/video/1248826871?autoplay=1&amp;muted=0&amp;controls=0&amp;playsinline=1&amp;title=0&amp;byline=0&amp;portrait=0&amp;keyboard=0&amp;pip=0&amp;dnt=1" allow="autoplay; fullscreen" title="Vídeo: conheça O Manual dos Antigos"></iframe>
+        <video id="vsl" src="assets/vsl.mp4" poster="assets/vsl-capa.jpg" playsinline webkit-playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" aria-label="Vídeo: conheça O Manual dos Antigos"></video>
         <button class="trava" id="travaVsl" type="button" aria-label="Pausar ou continuar o vídeo">
           <span class="bola"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
         </button>
@@ -674,7 +671,6 @@ footer a{color:#d4c79f}
 </footer>
 
 
-<script src="https://player.vimeo.com/api/player.js"></script>
 <script>
 /* ===== CONFIGURAÇÃO: troque aqui preço, link do checkout e e-mail de suporte ===== */
 const CONFIG = {
@@ -838,76 +834,58 @@ if (jaLiberou || /liberado/.test(location.search)) setTimeout(liberar, 0); // de
 // Rede de segurança: se o vídeo não tocar por algum motivo, libera depois de 3 minutos na página
 setTimeout(liberar, LIBERA_MAX_MS);
 
-// VSL sem avançar nem retroceder
-const play = $('#playVsl'), trava = $('#travaVsl'), barra = $('#tempoBarra');
-if (window.Vimeo) {
-  const player = new Vimeo.Player($('#vsl'));
+// VSL sem avançar nem retroceder.
+// O vídeo fica no próprio site (assets/vsl.mp4) para o toque ligar o som em qualquer celular,
+// inclusive iPhone e o navegador do Instagram/Facebook.
+const play = $('#playVsl'), trava = $('#travaVsl'), barra = $('#tempoBarra'), video = $('#vsl'), txt = $('#playTxt');
+if (video && video.canPlayType) {
   // O vídeo TENTA começar sozinho e COM SOM. Quando o navegador bloqueia o som (celulares quase
   // sempre bloqueiam antes do primeiro toque), ele começa mudo e aparece "Toque para ativar o som".
   // O som liga no toque no vídeo ou no primeiro toque em qualquer lugar da página, e a VSL recomeça do início.
   let ultimo = 0, nossoSalto = false, comSom = false;
-  const txt = $('#playTxt');
   const mostrarBotao = mudo => {
     play.classList.toggle('mudo', mudo);
     txt.textContent = mudo ? 'Toque para ativar o som' : 'Toque para assistir';
     play.classList.remove('oculto');
   };
-  const pular = t => { nossoSalto = true; return player.setCurrentTime(t).catch(() => {}).finally(() => { nossoSalto = false; }); };
+  const pular = t => { nossoSalto = true; try { video.currentTime = t; } catch (e) {} };
 
-  player.on('timeupdate', d => {
-    ultimo = d.seconds;
-    if (d.seconds >= LIBERA_EM_SEG) liberar();
-    const p = d.duration ? d.seconds / d.duration : 0;
+  video.addEventListener('timeupdate', () => {
+    const t = video.currentTime;
+    if (!video.seeking) ultimo = t;
+    if (t >= LIBERA_EM_SEG) liberar();
+    const p = video.duration ? t / video.duration : 0;
     // Minutagem "fake": corre no começo e vai desacelerando até o fim
     barra.style.width = (100 * (1 - Math.pow(1 - p, 2.4))).toFixed(2) + '%';
   });
-  // Trava de avançar/voltar: só desfaz saltos que não foram feitos por esta página.
-  // (Engasgo de internet ou aba em segundo plano não contam como salto.)
-  player.on('seeked', d => {
-    if (!nossoSalto && Math.abs(d.seconds - ultimo) > 2) pular(ultimo);
+  // Trava de avançar/voltar: só desfaz saltos que não foram feitos por esta página
+  video.addEventListener('seeking', () => {
+    if (!nossoSalto && Math.abs(video.currentTime - ultimo) > 2) pular(ultimo);
   });
+  video.addEventListener('seeked', () => { nossoSalto = false; });
 
-  // Confere se o vídeo está tocando com som ou mudo e ajusta o botão
-  const conferir = async () => {
-    try {
-      const [pausado, mudo, vol] = await Promise.all([player.getPaused(), player.getMuted(), player.getVolume()]);
-      if (pausado) return false;
-      trava.classList.add('on');
-      if (!mudo && vol > 0) { comSom = true; play.classList.add('oculto'); }
-      else if (!comSom) mostrarBotao(true);
-      return true;
-    } catch (e) { return false; }
+  video.addEventListener('play', () => { trava.classList.add('on'); trava.classList.remove('pausado'); });
+  video.addEventListener('pause', () => { if (comSom && !video.ended) trava.classList.add('pausado'); });
+  video.addEventListener('ended', () => { trava.classList.remove('on', 'pausado'); barra.style.width = '100%'; });
+
+  // Começo: tenta com som; se o navegador não deixar, toca mudo; se nem mudo deixar, espera o toque
+  const comecar = () => {
+    video.muted = false;
+    video.play().then(() => { comSom = true; play.classList.add('oculto'); }).catch(() => {
+      if (comSom) return;
+      video.muted = true;
+      video.play().then(() => { if (!comSom) mostrarBotao(true); }).catch(() => { if (!comSom) mostrarBotao(false); });
+    });
   };
-  player.on('play', () => { trava.classList.add('on'); trava.classList.remove('pausado'); conferir(); });
-  // Se o vídeo começou antes do script ficar pronto, o aviso de "play" se perdeu: confere direto no player.
-  // Se o navegador travou o vídeo por causa do som, recomeça mudo (aí ele sempre deixa tocar).
-  player.ready().then(() => setTimeout(async () => {
-    if (comSom || await conferir()) return;
-    try { await player.setMuted(true); await player.play(); conferir(); } catch (e) {}
-  }, 1500)).catch(() => {});
-  player.on('pause', () => { if (comSom) trava.classList.add('pausado'); });
-  player.on('ended', () => { trava.classList.remove('on'); barra.style.width = '100%'; });
+  comecar();
 
-  // Liga o som, volta ao início e toca
+  // Liga o som, volta ao início e toca. Tudo dentro do próprio toque, que é o que os navegadores exigem
   const ligarSom = () => {
     play.classList.add('oculto');
-    comSom = true; ultimo = 0;
-    // Os comandos saem dentro do próprio toque, que é o que os navegadores exigem para liberar o som
-    player.setVolume(1).catch(() => {});
-    player.setMuted(false).catch(() => {});
-    pular(0);
-    player.play().catch(() => {});
-    // Confere se o navegador aceitou. Se o som foi bloqueado, segue mudo e o botão volta
-    setTimeout(async () => {
-      try {
-        const [pausado, mudo] = await Promise.all([player.getPaused(), player.getMuted()]);
-        if (mudo || pausado) {
-          comSom = false;
-          if (pausado) { await player.setMuted(true); await player.play(); }
-          mostrarBotao(true);
-        }
-      } catch (e) {}
-    }, 1200);
+    comSom = true;
+    video.muted = false; video.volume = 1;
+    ultimo = 0; pular(0);
+    video.play().catch(() => { comSom = false; mostrarBotao(false); });
   };
   play.addEventListener('click', ligarSom);
 
@@ -921,13 +899,11 @@ if (window.Vimeo) {
   };
   ['click', 'keydown'].forEach(t => addEventListener(t, primeiroToque, true));
 
-  // Toque no vídeo depois que ele já está com som: pausa ou continua conforme o estado real do player
-  trava.addEventListener('click', async () => {
-    try { (await player.getPaused()) ? player.play().catch(() => {}) : player.pause(); } catch (e) {}
-  });
+  // Toque no vídeo depois que ele já está com som: pausa ou continua
+  trava.addEventListener('click', () => { video.paused ? video.play().catch(() => {}) : video.pause(); });
 } else {
   play.addEventListener('click', () => play.classList.add('oculto'));
-  // Sem o player do Vimeo não há como medir o vídeo: libera a página inteira
+  // Sem player de vídeo não há como medir: libera a página inteira
   setTimeout(liberar, 0);
 }
 
