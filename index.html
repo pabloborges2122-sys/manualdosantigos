@@ -163,19 +163,26 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .citacao p+p{margin-top:12px}
 .citacao strong{color:var(--ouro-cl)}
 
-/* POR DENTRO (prints reais) */
-.dentro{overflow:hidden}
-.trilho{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 20px 22px;margin:0 -20px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.trilho::-webkit-scrollbar{display:none}
-.tela{flex:0 0 68%;max-width:250px;scroll-snap-align:center;text-align:center}
-.celular{position:relative;border-radius:30px;padding:9px;background:#1a1a17;box-shadow:0 22px 40px -18px rgba(23,58,34,.55),inset 0 0 0 2px #3a382f}
-.celular img{border-radius:22px;aspect-ratio:480/985;object-fit:cover;object-position:top;width:100%;background:#f7f1e3}
-.celular::before{content:"";position:absolute;top:15px;left:50%;width:56px;height:6px;margin-left:-28px;border-radius:9px;background:#1a1a17;z-index:2;opacity:.9}
-.tela p{margin-top:14px;font-size:1rem;color:var(--tinta-2);line-height:1.4}
-.tela p b{display:block;color:var(--mata);font-family:var(--serif);font-size:1.08rem}
-.pontos{display:flex;justify-content:center;gap:8px}
-.pontos button{width:9px;height:9px;border-radius:9px;border:0;background:var(--perg-2);cursor:pointer;transition:width .3s var(--ease),background .3s}
-.pontos button.on{width:26px;background:var(--folha)}
+/* ACESSO: no celular ou no papel */
+.modo{max-width:440px;margin:0 auto}
+.modo-abas{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--perg);border:1px solid var(--perg-2);border-radius:999px;padding:5px;margin-bottom:22px}
+.modo-abas button{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border:0;background:none;border-radius:999px;font:inherit;font-weight:700;font-size:1rem;color:var(--tinta-2);cursor:pointer;transition:color .35s var(--ease)}
+.modo-abas button .ic{width:20px;height:20px}
+.modo-abas button.on{color:#fbf2da}
+.modo-marca{position:absolute;top:5px;bottom:5px;left:5px;width:calc(50% - 5px);border-radius:999px;background:var(--mata);box-shadow:0 6px 14px -6px rgba(23,58,34,.6);transition:transform .45s var(--ease)}
+.modo[data-aba="1"] .modo-marca{transform:translateX(100%)}
+.modo-paineis{display:grid}
+.modo-painel{grid-area:1/1;display:grid;grid-template-columns:118px 1fr;gap:18px;align-items:center;opacity:0;visibility:hidden;transform:translateX(14px);transition:opacity .45s var(--ease),transform .45s var(--ease),visibility 0s .45s}
+.modo-painel.on{opacity:1;visibility:visible;transform:none;transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.modo-painel svg{width:118px;height:auto;filter:drop-shadow(0 16px 18px rgba(23,58,34,.25))}
+.modo-painel ul{list-style:none;display:grid;gap:12px}
+.modo-painel li{display:flex;gap:10px;align-items:flex-start;font-size:1rem;line-height:1.4;color:var(--tinta-2)}
+.modo-painel li .ic{flex:none;width:20px;height:20px;color:var(--folha);margin-top:2px}
+.modo-painel li b{color:var(--tinta)}
+.modo-tempo{height:3px;border-radius:3px;background:var(--perg-2);margin:22px auto 0;max-width:160px;overflow:hidden}
+.modo-tempo i{display:block;height:100%;width:0;background:var(--mel)}
+.modo-nota{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:22px;font-weight:700;color:var(--mata);text-align:center}
+.modo-nota .ic{width:20px;height:20px;color:var(--mel)}
 
 /* SUMÁRIO DO LIVRO */
 .livro{display:grid;grid-template-columns:132px 1fr;gap:22px;align-items:center;margin-bottom:34px}
@@ -266,9 +273,16 @@ h2{font-size:clamp(1.7rem,6vw,2.35rem);text-align:center;margin-bottom:12px;text
 .para-quem .ic{flex:0 0 26px;width:26px;height:26px;padding:5px;border-radius:50%;background:var(--folha);color:#fff;stroke-width:3;margin-top:1px}
 
 /* GARANTIA */
-.garantia{display:grid;grid-template-columns:110px 1fr;gap:20px;align-items:center}
-.garantia h2{text-align:left;font-size:1.6rem;margin-bottom:8px}
-.garantia p{color:var(--tinta-2);font-size:1rem}
+.garantia-caixa{position:relative;max-width:520px;margin:0 auto;text-align:center;background:#fff;border:1.5px solid var(--perg-2);border-radius:22px;padding:28px 20px 26px;box-shadow:0 14px 34px -18px rgba(23,58,34,.35)}
+.garantia-caixa::before{content:"";position:absolute;inset:7px;border:1px dashed var(--ouro);border-radius:16px;pointer-events:none;opacity:.6}
+.selo-svg{display:block;width:150px;height:150px;margin:-4px auto 14px;filter:drop-shadow(0 10px 14px rgba(59,34,14,.3))}
+.garantia-caixa h2{font-size:1.6rem;margin-bottom:10px}
+.garantia-caixa>p{color:var(--tinta-2);font-size:1rem;max-width:30em;margin:0 auto}
+.garantia-pontos{list-style:none;display:grid;gap:10px;max-width:22em;margin:18px auto 4px;text-align:left}
+.garantia-pontos li{display:flex;gap:10px;align-items:flex-start;font-size:.96rem;line-height:1.4;color:var(--tinta-2)}
+.garantia-pontos .ic{flex:none;width:20px;height:20px;color:var(--folha);margin-top:1px}
+.garantia-pontos b{color:var(--tinta)}
+.garantia-caixa .forte{margin-top:8px;font-weight:700;color:var(--mata)}
 
 /* FAQ */
 .faq details{border-bottom:1px solid var(--perg-2)}
@@ -307,17 +321,12 @@ footer a{color:#d4c79f}
 }
 @media (min-width:700px){
   section{padding:84px 0}
-  .tela{flex-basis:230px}
-  .trilho{justify-content:center}
 }
 @media (max-width:370px){
   body{font-size:17px}
   .livro{grid-template-columns:100px 1fr}
   .recursos{grid-template-columns:1fr}
   .bonus{grid-template-columns:96px 1fr}
-  .garantia{grid-template-columns:1fr;text-align:center}
-  .garantia svg{margin:0 auto}
-  .garantia h2{text-align:center}
   .barra{font-size:.76rem}
 }
 </style>
@@ -459,21 +468,71 @@ footer a{color:#d4c79f}
   </div>
 </section>
 
-<!-- 4. POR DENTRO -->
-<section class="dentro" style="background:var(--papel)">
+<!-- 4. ACESSO: funciona como app no celular e pode ser impresso -->
+<section class="acesso" style="background:var(--papel)">
   <div class="wrap">
     <div class="rv">
-      <h2>Veja como é por dentro</h2>
-      <p class="intro">Estas são telas reais do manual, do jeito que aparecem no celular. Arraste para o lado.</p>
+      <h2>No celular ou no papel: você escolhe</h2>
+      <p class="intro">O manual chega no seu e-mail e funciona como um aplicativo. Se preferir, imprime e ele vira um livro para deixar na cozinha.</p>
     </div>
-    <div class="trilho rv" id="trilho">
-      <figure class="tela"><div class="celular"><img src="assets/dentro-1-capa.jpg" alt="Tela de abertura do manual com os botões de letra, modo noturno, busca e PDF" loading="lazy" width="480" height="985"></div><p><b>Abre como um app</b>Botões grandes para aumentar a letra, buscar e imprimir.</p></figure>
-      <figure class="tela"><div class="celular"><img src="assets/dentro-2-quando-bate.jpg" alt="Tela 'Quando bate... olhe aqui' com atalhos por situação" loading="lazy" width="480" height="985"></div><p><b>"Quando bate…"</b>Toque no que está sentindo e vá direto à parte certa.</p></figure>
-      <figure class="tela"><div class="celular"><img src="assets/dentro-3-receita.jpg" alt="Receita aberta do chá de gengibre com aviso de atenção para quem usa anticoagulante" loading="lazy" width="480" height="985"></div><p><b>Cada receita completa</b>Para que serve, ingredientes, passo a passo e cuidados.</p></figure>
-      <figure class="tela"><div class="celular"><img src="assets/dentro-4-perfil.jpg" alt="Tela 'Meu perfil de cuidado' com opções como anticoagulante e remédio de pressão" loading="lazy" width="480" height="985"></div><p><b>Meu perfil de cuidado</b>Marque seus remédios e veja o que pede atenção.</p></figure>
+    <div class="modo rv" id="modo" data-aba="0">
+      <div class="modo-abas" role="tablist" aria-label="Como usar o manual">
+        <span class="modo-marca" aria-hidden="true"></span>
+        <button type="button" role="tab" class="on" aria-selected="true" data-aba="0"><svg class="ic"><use href="#i-celular"/></svg>No celular</button>
+        <button type="button" role="tab" aria-selected="false" data-aba="1"><svg class="ic"><use href="#i-livro"/></svg>No papel</button>
+      </div>
+      <div class="modo-paineis">
+        <div class="modo-painel on" role="tabpanel">
+          <svg viewBox="0 0 120 210" aria-hidden="true">
+            <rect x="4" y="2" width="112" height="206" rx="20" fill="#1a1a17"/>
+            <rect x="11" y="10" width="98" height="190" rx="14" fill="#fbf5e6"/>
+            <rect x="46" y="15" width="28" height="5" rx="2.5" fill="#1a1a17"/>
+            <rect x="11" y="26" width="98" height="30" fill="#173a22"/>
+            <rect x="20" y="34" width="52" height="6" rx="3" fill="#e2c784"/>
+            <rect x="20" y="44" width="34" height="4" rx="2" fill="#7f9a72"/>
+            <circle cx="95" cy="41" r="8" fill="#e9a93b"/><text x="95" y="44.5" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-weight="700" fill="#1d2b12">Aa</text>
+            <rect x="19" y="64" width="82" height="14" rx="7" fill="#fff" stroke="#e9d9b0"/>
+            <circle cx="28" cy="71" r="3" fill="none" stroke="#8a7d5c" stroke-width="1.4"/><rect x="35" y="69" width="30" height="4" rx="2" fill="#cdbf9c"/>
+            <rect x="19" y="86" width="82" height="34" rx="8" fill="#fff" stroke="#e9d9b0"/>
+            <circle cx="31" cy="103" r="7" fill="#e9a93b"/><rect x="43" y="96" width="44" height="5" rx="2.5" fill="#173a22"/><rect x="43" y="105" width="32" height="4" rx="2" fill="#cdbf9c"/>
+            <rect x="19" y="126" width="82" height="34" rx="8" fill="#fff" stroke="#e9d9b0"/>
+            <circle cx="31" cy="143" r="7" fill="#7bb065"/><rect x="43" y="136" width="40" height="5" rx="2.5" fill="#173a22"/><rect x="43" y="145" width="36" height="4" rx="2" fill="#cdbf9c"/>
+            <rect x="19" y="166" width="82" height="24" rx="8" fill="#fff" stroke="#e9d9b0"/>
+            <circle cx="31" cy="178" r="6" fill="#b8913f"/><rect x="43" y="175" width="38" height="5" rx="2.5" fill="#173a22"/>
+          </svg>
+          <ul>
+            <li><svg class="ic"><use href="#i-raio"/></svg><span><b>Abre na hora</b>, direto do e-mail, sem instalar nada</span></li>
+            <li><svg class="ic"><use href="#i-busca"/></svg><span><b>Busca:</b> digite "tosse" ou "sono" e a receita aparece</span></li>
+            <li><svg class="ic"><use href="#i-letra"/></svg><span><b>Letra grande</b> com um toque e modo noturno</span></li>
+          </ul>
+        </div>
+        <div class="modo-painel" role="tabpanel">
+          <svg viewBox="0 0 120 150" aria-hidden="true">
+            <ellipse cx="60" cy="142" rx="50" ry="5" fill="#173a22" opacity=".15"/>
+            <path d="M8 22 60 30v108L8 130z" fill="#fff" stroke="#e9d9b0"/>
+            <path d="M112 22 60 30v108l52-8z" fill="#fbf5e6" stroke="#e9d9b0"/>
+            <path d="M60 30v108" stroke="#d9c592" stroke-width="2"/>
+            <g fill="none" stroke="#8a7d5c" stroke-width="2.2" stroke-linecap="round"><path d="M56 40h8"/><path d="M56 52h8"/><path d="M56 64h8"/><path d="M56 76h8"/><path d="M56 88h8"/><path d="M56 100h8"/><path d="M56 112h8"/><path d="M56 124h8"/></g>
+            <rect x="17" y="38" width="32" height="6" rx="3" fill="#173a22"/>
+            <rect x="17" y="50" width="36" height="3.5" rx="1.75" fill="#cdbf9c"/><rect x="17" y="58" width="30" height="3.5" rx="1.75" fill="#cdbf9c"/><rect x="17" y="66" width="34" height="3.5" rx="1.75" fill="#cdbf9c"/>
+            <path d="M20 82h24v6a12 12 0 0 1-24 0z" fill="#e9a93b"/><path d="M44 84h3a4 4 0 0 1 0 8h-4" fill="none" stroke="#e9a93b" stroke-width="2.4"/>
+            <path d="M27 76c-2 2 2 3 0 5M34 75c-2 2 2 3 0 5" fill="none" stroke="#b8913f" stroke-width="1.6" stroke-linecap="round"/>
+            <rect x="17" y="106" width="34" height="3.5" rx="1.75" fill="#cdbf9c"/><rect x="17" y="114" width="28" height="3.5" rx="1.75" fill="#cdbf9c"/>
+            <rect x="71" y="40" width="28" height="6" rx="3" fill="#173a22"/>
+            <path d="M74 54c10 0 15 5 15 14-10 1-16-5-15-14z" fill="#7bb065"/>
+            <rect x="71" y="80" width="34" height="3.5" rx="1.75" fill="#cdbf9c"/><rect x="71" y="88" width="30" height="3.5" rx="1.75" fill="#cdbf9c"/><rect x="71" y="96" width="33" height="3.5" rx="1.75" fill="#cdbf9c"/><rect x="71" y="104" width="26" height="3.5" rx="1.75" fill="#cdbf9c"/>
+          </svg>
+          <ul>
+            <li><svg class="ic"><use href="#i-impressora"/></svg><span><b>Um botão gera o PDF</b> pronto para imprimir</span></li>
+            <li><svg class="ic"><use href="#i-livro"/></svg><span>Imprima em casa ou na papelaria e <b>encaderne como um livro</b></span></li>
+            <li><svg class="ic"><use href="#i-xicara"/></svg><span><b>Fica na cozinha</b>, aberto na receita do dia</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="modo-tempo" aria-hidden="true"><i id="modoTempo"></i></div>
     </div>
-    <div class="pontos" id="pontos" aria-hidden="true"></div>
-    <a class="btn rv" href="#checkout" data-checkout style="margin-top:30px">Quero ter o manual no meu celular<small>R$ <span data-preco="completo">29,90</span>, acesso na hora</small></a>
+    <p class="modo-nota rv"><svg class="ic"><use href="#i-presente"/></svg>As duas formas vêm no mesmo pagamento</p>
+    <a class="btn rv" href="#checkout" data-checkout style="margin-top:26px">Quero ter o meu manual<small>R$ <span data-preco="completo">29,90</span>, acesso na hora</small></a>
   </div>
 </section>
 
@@ -611,17 +670,30 @@ footer a{color:#d4c79f}
 <!-- 9. GARANTIA -->
 <section style="background:var(--papel);padding:56px 0">
   <div class="wrap">
-    <div class="garantia rv">
-      <svg width="110" height="110" viewBox="0 0 120 120" aria-hidden="true">
-        <path d="M60 4l8 7 10-3 5 9 10 1 1 10 9 5-3 10 7 8-7 8 3 10-9 5-1 10-10 1-5 9-10-3-8 7-8-7-10 3-5-9-10-1-1-10-9-5 3-10-7-8 7-8-3-10 9-5 1-10 10-1 5-9 10 3z" fill="#173a22"/>
-        <circle cx="60" cy="60" r="40" fill="none" stroke="#e2c784" stroke-width="1.5" stroke-dasharray="2 4"/>
-        <text x="60" y="62" text-anchor="middle" font-family="Palatino Linotype,Georgia,serif" font-size="38" font-weight="700" fill="#fbf2da">7</text>
-        <text x="60" y="80" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#e9a93b" letter-spacing="1.5">DIAS</text>
+    <div class="garantia-caixa rv">
+      <svg class="selo-svg" viewBox="0 0 200 200" role="img" aria-label="Selo: 7 dias de garantia incondicional">
+        <defs>
+          <linearGradient id="sg-ouro" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f8d97e"/><stop offset=".5" stop-color="#e9a93b"/><stop offset="1" stop-color="#b8792a"/></linearGradient>
+          <path id="sg-cima" d="M38 100a62 62 0 0 1 124 0"/>
+          <path id="sg-baixo" d="M31 100a69 69 0 0 0 138 0"/>
+        </defs>
+        <path fill="url(#sg-ouro)" d="M196.0 100.0L187.7 107.7L194.5 116.7L185.0 122.8L190.2 132.8L179.8 137.2L183.1 148.0L172.1 150.5L173.5 161.7L162.2 162.2L161.7 173.5L150.5 172.1L148.0 183.1L137.2 179.8L132.8 190.2L122.8 185.0L116.7 194.5L107.7 187.7L100.0 196.0L92.3 187.7L83.3 194.5L77.2 185.0L67.2 190.2L62.8 179.8L52.0 183.1L49.5 172.1L38.3 173.5L37.8 162.2L26.5 161.7L27.9 150.5L16.9 148.0L20.2 137.2L9.8 132.8L15.0 122.8L5.5 116.7L12.3 107.7L4.0 100.0L12.3 92.3L5.5 83.3L15.0 77.2L9.8 67.2L20.2 62.8L16.9 52.0L27.9 49.5L26.5 38.3L37.8 37.8L38.3 26.5L49.5 27.9L52.0 16.9L62.8 20.2L67.2 9.8L77.2 15.0L83.3 5.5L92.3 12.3L100.0 4.0L107.7 12.3L116.7 5.5L122.8 15.0L132.8 9.8L137.2 20.2L148.0 16.9L150.5 27.9L161.7 26.5L162.2 37.8L173.5 38.3L172.1 49.5L183.1 52.0L179.8 62.8L190.2 67.2L185.0 77.2L194.5 83.3L187.7 92.3Z"/>
+        <circle cx="100" cy="100" r="80" fill="#2f5a34"/>
+        <circle cx="100" cy="100" r="74" fill="none" stroke="#e9a93b" stroke-width="1.6"/>
+        <circle cx="100" cy="100" r="47" fill="none" stroke="#e9a93b" stroke-width="1" stroke-dasharray="2 3" opacity=".8"/>
+        <text font-family="Segoe UI,Arial,sans-serif" font-size="10.2" font-weight="800" letter-spacing="1.3" fill="#f8e6b4"><textPath href="#sg-cima" startOffset="50%" text-anchor="middle">GARANTIA INCONDICIONAL</textPath></text>
+        <text font-family="Segoe UI,Arial,sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#f8e6b4"><textPath href="#sg-baixo" startOffset="50%" text-anchor="middle">★ DINHEIRO DE VOLTA ★</textPath></text>
+        <text x="100" y="114" text-anchor="middle" font-family="Palatino Linotype,Georgia,serif" font-size="58" font-weight="700" fill="#fbf2da">7</text>
+        <text x="100" y="135" text-anchor="middle" font-family="Segoe UI,Arial,sans-serif" font-size="12" font-weight="800" letter-spacing="3" fill="#e9a93b">DIAS</text>
       </svg>
-      <div>
-        <h2>Garantia de 7 dias, sem perguntas</h2>
-        <p>Leve o manual, abra e use as receitas. Se em até 7 dias achar que não é para você, peça o reembolso e devolvemos <strong>todo o valor</strong>, sem burocracia.</p>
-      </div>
+      <h2>Experimente por 7 dias sem preocupação</h2>
+      <p>Abra o manual e faça as suas primeiras receitas. Se em até 7 dias você achar que não é para você, por qualquer motivo, é só pedir o reembolso e devolvemos todo o seu dinheiro.</p>
+      <ul class="garantia-pontos">
+        <li><svg class="ic"><use href="#i-check"/></svg><span><b>100% do valor de volta</b>, sem descontar nada</span></li>
+        <li><svg class="ic"><use href="#i-check"/></svg><span><b>Sem perguntas</b> e sem burocracia</span></li>
+        <li><svg class="ic"><use href="#i-escudo"/></svg><span>Direito garantido pelo <b>Código de Defesa do Consumidor</b> (art. 49)</span></li>
+      </ul>
+      <p class="forte">O risco é todo nosso.</p>
     </div>
   </div>
 </section>
@@ -907,22 +979,27 @@ if (video && video.canPlayType) {
   setTimeout(liberar, 0);
 }
 
-// Carrossel "por dentro": pontos que acompanham o arraste
+// Acesso: abas "No celular" / "No papel" que se alternam sozinhas até a pessoa tocar numa delas
 (function () {
-  const trilho = $('#trilho'), pontos = $('#pontos'), telas = [...trilho.children];
-  telas.forEach((t, i) => {
-    const b = document.createElement('button');
-    b.type = 'button'; b.addEventListener('click', () => t.scrollIntoView({ behavior: calmo ? 'auto' : 'smooth', inline: 'center', block: 'nearest' }));
-    pontos.appendChild(b);
-  });
-  const marcar = () => {
-    const meio = trilho.scrollLeft + trilho.clientWidth / 2;
-    let perto = 0, menor = Infinity;
-    telas.forEach((t, i) => { const d = Math.abs(t.offsetLeft + t.offsetWidth / 2 - meio); if (d < menor) { menor = d; perto = i; } });
-    [...pontos.children].forEach((b, i) => b.classList.toggle('on', i === perto));
+  const modo = $('#modo'); if (!modo) return;
+  const abas = [...modo.querySelectorAll('[role=tab]')], paineis = [...modo.querySelectorAll('.modo-painel')], tempo = $('#modoTempo');
+  const INTERVALO = 4500;
+  let atual = 0, auto = !calmo, anim, timer;
+  const mostrar = i => {
+    atual = i; modo.dataset.aba = i;
+    abas.forEach((b, j) => { b.classList.toggle('on', j === i); b.setAttribute('aria-selected', j === i); });
+    paineis.forEach((p, j) => p.classList.toggle('on', j === i));
   };
-  trilho.addEventListener('scroll', () => requestAnimationFrame(marcar), { passive: true });
-  marcar();
+  const parar = () => { auto = false; clearTimeout(timer); if (anim) anim.cancel(); tempo.parentElement.style.visibility = 'hidden'; };
+  const girar = () => {
+    if (!auto) return;
+    if (tempo.animate) anim = tempo.animate([{ width: '0%' }, { width: '100%' }], { duration: INTERVALO, easing: 'linear', fill: 'forwards' });
+    timer = setTimeout(() => { if (auto) { mostrar(1 - atual); girar(); } }, INTERVALO);
+  };
+  abas.forEach((b, i) => b.addEventListener('click', () => { parar(); mostrar(i); }));
+  if (!auto) { parar(); return; }
+  // Só começa a alternar quando a seção aparece na tela
+  new IntersectionObserver((e, o) => { if (e[0].isIntersecting) { o.disconnect(); girar(); } }, { threshold: .4 }).observe(modo);
 })();
 
 // FAQ: abre e fecha com a altura animada
