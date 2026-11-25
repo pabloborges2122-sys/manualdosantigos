@@ -890,10 +890,10 @@ if (CONFIG.suporte) {
   a.href = 'mailto:' + CONFIG.suporte; a.textContent = CONFIG.suporte; sup.hidden = false;
 }
 
-// Liberação: o resto da página e o botão do topo só aparecem quando a VSL chega na parte
-// em que o Seu Antônio apresenta o manual ("MAIS DE 60 RECEITAS", aos 60 s do vídeo).
+// Liberação: o resto da página e o botão do topo só aparecem quando a VSL chega em
+// LIBERA_EM_SEG segundos de vídeo (era 61 s, quando o Seu Antônio apresenta o manual; agora 30 s).
 // Quem já liberou uma vez (ou chega com ?liberado no link) vê tudo direto.
-const LIBERA_EM_SEG = 61, LIBERA_MAX_MS = 180000;
+const LIBERA_EM_SEG = 30, LIBERA_MAX_MS = 45000;  // segundos de vídeo / tempo máximo na página (ms)
 let liberado = false;
 function liberar() {
   if (liberado) return;
@@ -907,7 +907,7 @@ function liberar() {
 let jaLiberou = false;
 try { jaLiberou = localStorage.getItem('mda_lib') === '1'; } catch (e) {}
 if (jaLiberou || /liberado/.test(location.search)) setTimeout(liberar, 0); // depois do script inteiro carregar
-// Rede de segurança: se o vídeo não tocar por algum motivo, libera depois de 3 minutos na página
+// Rede de segurança: se o vídeo não tocar por algum motivo, libera depois de 45 segundos na página
 setTimeout(liberar, LIBERA_MAX_MS);
 
 // VSL sem avançar nem retroceder.
